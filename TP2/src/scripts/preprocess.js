@@ -9,7 +9,13 @@
  */
 export function cleanNames (data) {
   // TODO: Clean the player name data
-  return []
+  data.map(dataCSV => {
+    const capLetter = dataCSV.Player.charAt(0).toUpperCase();
+    const lwrLetters = dataCSV.Player.slice(1).toLowerCase();
+    dataCSV.Player = capLetter + lwrLetters;
+  })
+
+  return data;
 }
 
 /**
@@ -20,7 +26,18 @@ export function cleanNames (data) {
  */
 export function getTopPlayers (data) {
   // TODO: Find the five top players with the most lines in the play
-  return []
+  const top5names = []
+  const nameResultMap = new Map()
+  data.forEach(dataCSV => {
+    if(nameResultMap.has(dataCSV.Player)) nameResultMap.set(dataCSV.Player, nameResultMap.get(dataCSV) + 1)
+    else nameResultMap.set(dataCSV.Player, 1)
+  })
+
+  const nameResultMapSorted = new Map([...nameResultMap.entries()].sort((a, b) => b[1] - a[1]));
+  array = Array.from(nameResultMapSorted, ([name, result]) => ({ name, result }));
+  top5names = array.slice(0, 5);
+  console.log(top5names)
+  return top5names;
 }
 
 /**
