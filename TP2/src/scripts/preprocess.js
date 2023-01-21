@@ -29,7 +29,7 @@ export function getTopPlayers (data) {
   const top5names = []
   const nameResultMap = new Map()
   data.forEach(dataCSV => {
-    if(nameResultMap.has(dataCSV.Player)) nameResultMap.set(dataCSV.Player, nameResultMap.get(dataCSV) + 1)
+    if(nameResultMap.has(dataCSV.Player)) nameResultMap.set(dataCSV.Player, nameResultMap.get(dataCSV.Player) + 1)
     else nameResultMap.set(dataCSV.Player, 1)
   })
 
@@ -65,7 +65,37 @@ export function getTopPlayers (data) {
  */
 export function summarizeLines (data) {
   // TODO : Generate the data structure as defined above
-  return []
+  const acts = []
+  const summarizedData = []
+
+  //[1,2,3,4,5]
+  data.forEach(dataCSV => {
+    if(!acts.includes(dataCSV.Act)) acts.push(dataCSV.Act);
+  })
+
+
+  acts.forEach(act => {
+    const players = [];
+    const playerCount = []
+
+    data.forEach(dataCSV => {
+      if(dataCSV.Act == act){
+        if(!players.includes(dataCSV.Player)){
+          players.push(dataCSV.Player);
+          playerCount.push({Player: dataCSV.Player, Count: 1});
+        }
+        else{
+          playerCount.forEach(count => {
+            if(count.Player == dataCSV.Player) count.Count++;
+          })
+        }
+      }
+    })
+
+    summarizedData.push({Act: act, Players: playerCount});
+  })
+
+  return summarizedData;
 }
 
 /**
