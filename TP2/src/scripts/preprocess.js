@@ -111,5 +111,22 @@ export function replaceOthers (data, top) {
   // TODO : For each act, sum the lines uttered by players not in the top 5 for the play
   // and replace these players in the data structure by a player with name 'Other' and
   // a line count corresponding to the sum of lines
+  summarizedData_Other = [];
+
+  data.forEach(dataCSV => {
+    topPlayerCount = [];
+
+    top.forEach(topName=>{
+      topPlayerCount.push({Player: topName, Count: 0})
+    })
+    topPlayerCount.push({Player: Other, Count: 0})
+
+    dataCSV.Players.forEach(player =>{
+
+    })
+
+    summarizedData_Other.push({Act: dataCSV.Act, Players: playerCount})
+  })
+
   return []
 }
