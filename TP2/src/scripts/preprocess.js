@@ -111,21 +111,33 @@ export function replaceOthers (data, top) {
   // TODO : For each act, sum the lines uttered by players not in the top 5 for the play
   // and replace these players in the data structure by a player with name 'Other' and
   // a line count corresponding to the sum of lines
-  summarizedData_Other = [];
+  const acts = [];
+  const summarizedData_Other = [];
+
+  //[1,2,3,4,5]
+  data.forEach(dataCSV => {
+    if(!acts.includes(dataCSV.Act)) acts.push(dataCSV.Act);
+  })
 
   data.forEach(dataCSV => {
-    topPlayerCount = [];
+    const topPlayerCount = [];
+    otherCount = 0;
 
     top.forEach(topName=>{
       topPlayerCount.push({Player: topName, Count: 0})
     })
-    topPlayerCount.push({Player: Other, Count: 0})
-
+    
     dataCSV.Players.forEach(player =>{
-
+      if(top.includes(player)){
+        topPlayerCount.forEach(count => {
+          if(count.Player == dataCSV.Player) count.Count++;
+        })
+      }
+      else otherCount+=player.Count;
     })
-
-    summarizedData_Other.push({Act: dataCSV.Act, Players: playerCount})
+    
+    topPlayerCount.push({Player: Other, Count: otherCount})
+    summarizedData_Other.push({Act: dataCSV.Act, Players: topPlayerCount})
   })
 
   return []
