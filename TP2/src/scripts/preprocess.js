@@ -26,18 +26,22 @@ export function cleanNames (data) {
  */
 export function getTopPlayers (data) {
   // TODO: Find the five top players with the most lines in the play
-  const top5names = []
-  const nameResultMap = new Map()
+  var top5names = [];
+  var top5namesOnly = [];
+  const nameResultMap = new Map();
   data.forEach(dataCSV => {
-    if(nameResultMap.has(dataCSV.Player)) nameResultMap.set(dataCSV.Player, nameResultMap.get(dataCSV.Player) + 1)
-    else nameResultMap.set(dataCSV.Player, 1)
+    if(nameResultMap.has(dataCSV.Player)) nameResultMap.set(dataCSV.Player, nameResultMap.get(dataCSV.Player) + 1);
+    else nameResultMap.set(dataCSV.Player, 1);
   })
 
   const nameResultMapSorted = new Map([...nameResultMap.entries()].sort((a, b) => b[1] - a[1]));
-  array = Array.from(nameResultMapSorted, ([name, result]) => ({ name, result }));
+  const array = Array.from(nameResultMapSorted, ([name, result]) => ({ name, result }));
+
   top5names = array.slice(0, 5);
-  console.log(top5names)
-  return top5names;
+  for(let i in top5names){
+    top5namesOnly.push(top5names[i].name);
+  }
+  return top5namesOnly;
 }
 
 /**
@@ -65,8 +69,8 @@ export function getTopPlayers (data) {
  */
 export function summarizeLines (data) {
   // TODO : Generate the data structure as defined above
-  const acts = []
-  const summarizedData = []
+  const acts = [];
+  const summarizedData = [];
 
   //[1,2,3,4,5]
   data.forEach(dataCSV => {
@@ -76,7 +80,7 @@ export function summarizeLines (data) {
 
   acts.forEach(act => {
     const players = [];
-    const playerCount = []
+    const playerCount = [];
 
     data.forEach(dataCSV => {
       if(dataCSV.Act == act){
@@ -95,6 +99,7 @@ export function summarizeLines (data) {
     summarizedData.push({Act: act, Players: playerCount});
   })
 
+  console.log(summarizedData);
   return summarizedData;
 }
 
@@ -111,23 +116,18 @@ export function replaceOthers (data, top) {
   // TODO : For each act, sum the lines uttered by players not in the top 5 for the play
   // and replace these players in the data structure by a player with name 'Other' and
   // a line count corresponding to the sum of lines
-
   data.forEach(act=>{
-    var otherCount = 0;
-
+    const newPlayers = [];
+    var countOther = 0;
     act.Players.forEach(player=>{
-      top.forEach(topPlayer=>{
-        if(player.Player!==topPlayer){
-          otherCount+=player.Count;
-
-          //splice the element
-          const index= act.Players.indexOf(player);
-          act.Players.splice(index,1);
-        }
-      })
-    })
-    act.Players.push({Player: 'Other', Count: otherCount});
+      if (top.includes(player.Player)) {
+        newPlayers.push(player);
+      } else {
+        countOther += player.Count;
+      }
+    });
+    newPlayers.push({Player:"Other", Count: countOther});
+    act.Players = newPlayers;
   })
-
   return data;
 }
