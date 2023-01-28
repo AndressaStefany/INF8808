@@ -23,6 +23,14 @@ export function updateGroupXScale (scale, data, width) {
  */
 export function updateYScale (scale, data, height) {
   // TODO : Set the domain and range of the graph's y scale
+  var maxData = d3.max(data, function (d) {
+    var max = d.Players.reduce((previous, current) => {
+      return current.Count > previous.Count ? current : previous
+    })
+    return max.Count
+  })
+
+  scale.domain([maxData, 0]).range([0, height])
 }
 
 /**
