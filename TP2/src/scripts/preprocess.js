@@ -99,7 +99,6 @@ export function summarizeLines (data) {
     summarizedData.push({Act: act, Players: playerCount});
   })
 
-  console.log(summarizedData);
   return summarizedData;
 }
 
