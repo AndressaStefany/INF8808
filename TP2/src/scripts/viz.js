@@ -8,6 +8,10 @@
  */
 export function updateGroupXScale (scale, data, width) {
   // TODO : Set the domain and range of the groups' x scale
+  var domainList = data.map(element => {
+    return element.Act
+  })
+  scale.domain(domainList).range([0, width])
 }
 
 /**
