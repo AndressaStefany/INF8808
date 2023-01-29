@@ -8,9 +8,7 @@
  */
 export function updateGroupXScale (scale, data, width) {
   // TODO : Set the domain and range of the groups' x scale
-  var domainList = data.map(element => {
-    return element.Act
-  })
+  var domainList = data.map(element =>  element.Act)
   scale.domain(domainList).range([0, width])
 }
 
@@ -30,7 +28,7 @@ export function updateYScale (scale, data, height) {
     return max.Count
   })
 
-  scale.domain([maxData, 0]).range([0, height])
+  scale.domain([0, maxData]).range([height, 0])
 }
 
 /**
@@ -42,7 +40,13 @@ export function updateYScale (scale, data, height) {
  */
 export function createGroups (data, x) {
   // TODO : Create the groups
-  d3.select('#graph-g')
+  d3.select('#graph-g').selectAll('svg')
+    .data(data)
+    .enter()
+    .append('svg')
+    .attr('x', function (d, i) {
+      return x(i + 1)
+    })
 }
 
 /**
