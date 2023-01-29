@@ -8,7 +8,7 @@
  */
 export function updateGroupXScale (scale, data, width) {
   // TODO : Set the domain and range of the groups' x scale
-  var domainList = data.map(element =>  element.Act)
+  var domainList = data.map(element => element.Act)
   scale.domain(domainList).range([0, width])
 }
 
@@ -44,9 +44,7 @@ export function createGroups (data, x) {
     .data(data)
     .enter()
     .append('svg')
-    .attr('x', function (d, i) {
-      return x(i + 1)
-    })
+    .attr('x', function (d, i) { return x(i + 1) })
 }
 
 /**
@@ -61,5 +59,23 @@ export function createGroups (data, x) {
  */
 export function drawBars (y, xSubgroup, players, height, color, tip) {
   // TODO : Draw the bars
-  d3.select('#graph-g')
+  d3.select('#graph-g').selectAll('svg')
+    .attr('height', height)
+    .selectAll('rect')
+    .data(function (d) {
+      d.Players.forEach(element => {
+        element.Act = d.Act
+      })
+      return d.Players
+      // {Player: 'Benvolio', Count: 34, Act: '1'}
+    })
+    .enter()
+    .append('rect')
+    .attr('x', function (d) { return xSubgroup(d.Player) }) // overlap problem
+    .attr('y', function (d) { return y(d.Count) })
+    .attr('width', xSubgroup.bandwidth())
+    .attr('height', function (d) { return height - y(d.Count) })
+    .attr('fill', function (d) { return color(d.Player) })
+    .on('mouseover', tip.show)
+    .on('mouseout', tip.hide)
 }
