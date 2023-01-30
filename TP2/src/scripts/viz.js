@@ -40,11 +40,14 @@ export function updateYScale (scale, data, height) {
  */
 export function createGroups (data, x) {
   // TODO : Create the groups
-  d3.select('#graph-g').selectAll('svg')
+  d3.select('#graph-g').selectAll('.group')
     .data(data)
     .enter()
-    .append('svg')
-    .attr('x', function (d, i) { return x(i + 1) })
+    .append('g')
+    .attr('class', 'group')
+    .attr('transform', function (d) {
+      return 'translate(' + x(d.Act) + ',0)'
+    })
 }
 
 /**
@@ -59,19 +62,21 @@ export function createGroups (data, x) {
  */
 export function drawBars (y, xSubgroup, players, height, color, tip) {
   // TODO : Draw the bars
-  d3.select('#graph-g').selectAll('svg')
-    .attr('height', height)
+  d3.select('#graph-g').selectAll('.group')
     .selectAll('rect')
     .data(function (d) {
-      d.Players.forEach(element => {
-        element.Act = d.Act
+      players.map(player => {
+        d.Players.forEach(element => {
+          if (player === element.Player) {
+            element.Act = d.Act
+          }
+        })
       })
       return d.Players
-      // {Player: 'Benvolio', Count: 34, Act: '1'}
     })
     .enter()
     .append('rect')
-    .attr('x', function (d) { return xSubgroup(d.Player) }) // overlap problem
+    .attr('x', function (d) { return xSubgroup(d.Player) })
     .attr('y', function (d) { return y(d.Count) })
     .attr('width', xSubgroup.bandwidth())
     .attr('height', function (d) { return height - y(d.Count) })
