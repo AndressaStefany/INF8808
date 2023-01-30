@@ -10,12 +10,12 @@
 export function cleanNames (data) {
   // TODO: Clean the player name data
   data.map(dataCSV => {
-    const capLetter = dataCSV.Player.charAt(0).toUpperCase();
-    const lwrLetters = dataCSV.Player.slice(1).toLowerCase();
-    dataCSV.Player = capLetter + lwrLetters;
+    const capLetter = dataCSV.Player.charAt(0).toUpperCase()
+    const lwrLetters = dataCSV.Player.slice(1).toLowerCase()
+    dataCSV.Player = capLetter + lwrLetters
   })
 
-  return data;
+  return data
 }
 
 /**
@@ -26,22 +26,22 @@ export function cleanNames (data) {
  */
 export function getTopPlayers (data) {
   // TODO: Find the five top players with the most lines in the play
-  var top5names = [];
-  var top5namesOnly = [];
-  const nameResultMap = new Map();
+  var top5names = []
+  var top5namesOnly = []
+  const nameResultMap = new Map()
   data.forEach(dataCSV => {
-    if(nameResultMap.has(dataCSV.Player)) nameResultMap.set(dataCSV.Player, nameResultMap.get(dataCSV.Player) + 1);
-    else nameResultMap.set(dataCSV.Player, 1);
+    if (nameResultMap.has(dataCSV.Player)) nameResultMap.set(dataCSV.Player, nameResultMap.get(dataCSV.Player) + 1)
+    else nameResultMap.set(dataCSV.Player, 1)
   })
 
-  const nameResultMapSorted = new Map([...nameResultMap.entries()].sort((a, b) => b[1] - a[1]));
-  const array = Array.from(nameResultMapSorted, ([name, result]) => ({ name, result }));
+  const nameResultMapSorted = new Map([...nameResultMap.entries()].sort((a, b) => b[1] - a[1]))
+  const array = Array.from(nameResultMapSorted, ([name, result]) => ({ name, result }))
 
-  top5names = array.slice(0, 5);
-  for(let i in top5names){
-    top5namesOnly.push(top5names[i].name);
+  top5names = array.slice(0, 5)
+  for (var i in top5names) {
+    top5namesOnly.push(top5names[i].name)
   }
-  return top5namesOnly;
+  return top5namesOnly
 }
 
 /**
@@ -69,37 +69,35 @@ export function getTopPlayers (data) {
  */
 export function summarizeLines (data) {
   // TODO : Generate the data structure as defined above
-  const acts = [];
-  const summarizedData = [];
+  const acts = []
+  const summarizedData = []
 
-  //[1,2,3,4,5]
+  // [1, 2, 3, 4, 5]
   data.forEach(dataCSV => {
-    if(!acts.includes(dataCSV.Act)) acts.push(dataCSV.Act);
+    if (!acts.includes(dataCSV.Act)) acts.push(dataCSV.Act)
   })
 
-
   acts.forEach(act => {
-    const players = [];
-    const playerCount = [];
+    const players = []
+    const playerCount = []
 
-    data.forEach(dataCSV => {
-      if(dataCSV.Act == act){
-        if(!players.includes(dataCSV.Player)){
-          players.push(dataCSV.Player);
-          playerCount.push({Player: dataCSV.Player, Count: 1});
-        }
-        else{
+    data.forEach(dataCSV => {
+      if (dataCSV.Act === act) {
+        if (!players.includes(dataCSV.Player)) {
+          players.push(dataCSV.Player)
+          playerCount.push({ Player: dataCSV.Player, Count: 1 })
+        } else {
           playerCount.forEach(count => {
-            if(count.Player == dataCSV.Player) count.Count++;
+            if (count.Player === dataCSV.Player) count.Count++
           })
         }
       }
     })
 
-    summarizedData.push({Act: act, Players: playerCount});
+    summarizedData.push({ Act: act, Players: playerCount })
   })
 
-  return summarizedData;
+  return summarizedData
 }
 
 /**
@@ -115,18 +113,18 @@ export function replaceOthers (data, top) {
   // TODO : For each act, sum the lines uttered by players not in the top 5 for the play
   // and replace these players in the data structure by a player with name 'Other' and
   // a line count corresponding to the sum of lines
-  data.forEach(act=>{
-    const newPlayers = [];
-    var countOther = 0;
-    act.Players.forEach(player=>{
+  data.forEach(act => {
+    const newPlayers = []
+    var countOther = 0
+    act.Players.forEach(player => {
       if (top.includes(player.Player)) {
-        newPlayers.push(player);
+        newPlayers.push(player)
       } else {
-        countOther += player.Count;
+        countOther += player.Count
       }
-    });
-    newPlayers.push({Player:"Other", Count: countOther});
-    act.Players = newPlayers;
+    })
+    newPlayers.push({ Player: 'Other', Count: countOther })
+    act.Players = newPlayers
   })
-  return data;
+  return data
 }
