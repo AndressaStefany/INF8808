@@ -1,21 +1,17 @@
 @font-face {
-    font-family: 'Grenze Gotisch';
+    font-family: 'Roboto';
     font-style: normal;
     font-weight: 400;
-    src: url('./fonts/grenze_gotish/grenze-gotisch-v1-latin-regular.eot');
-    src: local(''),
-         url('./fonts/grenze_gotish/grenze-gotisch-v1-latin-regular.woff2') format('woff2'), 
-         url('./fonts/grenze_gotish/grenze-gotisch-v1-latin-regular.woff') format('woff'), 
-         url('./fonts/grenze_gotish/grenze-gotisch-v1-latin-regular.svg#GrenzeGotisch') format('svg'); 
-}
+    src: local('Roboto'), local('Roboto-Regular'),
+         url('./fonts/roboto/roboto-v20-latin-regular.woff2') format('woff2'), 
+         url('./fonts/roboto/roboto-v20-latin-regular.woff') format('woff'); 
+  }
 
 @font-face {
-    font-family: 'Montserrat';
+    font-family: 'Roboto Slab';
     font-style: normal;
     font-weight: 400;
-    src: url('./fonts/montserrat/montserrat-v14-latin-regular.eot');
-    src: local('Montserrat Regular'), local('Montserrat-Regular'),
-         url('./fonts/montserrat/montserrat-v14-latin-regular.woff2') format('woff2'), 
-         url('./fonts/montserrat/montserrat-v14-latin-regular.woff') format('woff'), 
-         url('./fonts/montserrat/montserrat-v14-latin-regular.svg#Montserrat') format('svg'); 
+    src: local(''),
+         url('./fonts/roboto-slab/roboto-slab-v12-latin-regular.woff2') format('woff2'), 
+         url('./fonts/roboto-slab/roboto-slab-v12-latin-regular.woff') format('woff'); 
   }

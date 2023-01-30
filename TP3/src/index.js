@@ -1,61 +1,51 @@
 'use strict'
 
+import * as helper from './scripts/helper.js'
 import * as preproc from './scripts/preprocess.js'
 import * as viz from './scripts/viz.js'
-import * as helper from './scripts/helper.js'
 import * as legend from './scripts/legend.js'
-import * as tooltip from './scripts/tooltip.js'
+import * as hover from './scripts/hover.js'
+import * as util from './scripts/util.js'
 
-import d3Tip from 'd3-tip'
+import * as d3Chromatic from 'd3-scale-chromatic'
 
 /**
- * @file This file is the entry-point for the the code for TP2 for the course INF8808.
+ * @file This file is the entry-point for the the code for TP3 for the course INF8808.
  * @author Olivia Gélinas
  * @version v1.0.0
  */
 
 (function (d3) {
-  const margin = { top: 80, right: 0, bottom: 80, left: 55 }
-  const barColors = ['#861388',
-    '#d4a0a7',
-    '#dbd053',
-    '#1b998b',
-    '#A0CED9',
-    '#3e6680']
-
   let bounds
   let svgSize
   let graphSize
 
-  const xScale = d3.scaleBand().padding(0.15)
-  const xSubgroupScale = d3.scaleBand().padding([0.015])
-  const yScale = d3.scaleLinear()
+  const margin = { top: 35, right: 200, bottom: 35, left: 200 }
 
-  const tip = d3Tip().attr('class', 'd3-tip').html(function (d) { return tooltip.getContents(d) })
-  d3.select('.main-svg').call(tip)
+  const xScale = d3.scaleBand().padding(0.05)
+  const yScale = d3.scaleBand().padding(0.2)
+  const colorScale = d3.scaleSequential(d3Chromatic.interpolateYlGnBu)
 
-  d3.csv('./romeo_and_juliet.csv').then(function (data) {
-    data = preproc.cleanNames(data)
+  d3.csv('./arbres.csv', d3.autoType).then(function (data) {
+    const neighborhoodNames = preproc.getNeighborhoodNames(data)
+    data = preproc.filterYears(data, 2010, 2020)
 
-    const topPlayers = preproc.getTopPlayers(data)
+    data = preproc.summarizeYearlyCounts(data)
+    data = preproc.fillMissingData(data, neighborhoodNames, 2010, 2020, util.range)
 
-    data = preproc.summarizeLines(data)
-    data = preproc.replaceOthers(data, topPlayers)
+    viz.setColorScaleDomain(colorScale, data)
 
-    topPlayers.push('Other')
-    topPlayers.sort((a, b) => a.localeCompare(b))
+    legend.initGradient(colorScale)
+    legend.initLegendBar()
+    legend.initLegendAxis()
 
     const g = helper.generateG(margin)
 
     helper.appendAxes(g)
-    helper.appendGraphLabels(g)
-
-    const color = helper.defineColorScale(barColors, topPlayers)
-
-    legend.draw(topPlayers, color)
+    viz.appendRects(data)
 
     setSizing()
-    build(data, topPlayers)
+    build()
 
     /**
      *   This function handles the graph's sizing.
@@ -80,22 +70,24 @@ import d3Tip from 'd3-tip'
      *   This function builds the graph.
      */
     function build () {
-      helper.positionLabels(graphSize.width, graphSize.height)
+      viz.updateXScale(xScale, data, graphSize.width, util.range)
+      viz.updateYScale(yScale, neighborhoodNames, graphSize.height)
 
-      viz.updateGroupXScale(xScale, data, graphSize.width)
-      helper.updateXSubgroupScale(xSubgroupScale, topPlayers, xScale)
-      viz.updateYScale(yScale, data, graphSize.height)
+      viz.drawXAxis(xScale)
+      viz.drawYAxis(yScale, graphSize.width)
 
-      helper.drawXAxis(xScale, graphSize.height)
-      helper.drawYAxis(yScale)
+      viz.rotateYTicks()
 
-      viz.createGroups(data, xScale)
-      viz.drawBars(yScale, xSubgroupScale, topPlayers, graphSize.height, color, tip)
+      viz.updateRects(xScale, yScale, colorScale)
+
+      hover.setRectHandler(xScale, yScale, hover.rectSelected, hover.rectUnselected, hover.selectTicks, hover.unselectTicks)
+
+      legend.draw(margin.left / 2, margin.top + 5, graphSize.height - 10, 15, 'url(#gradient)', colorScale)
     }
 
     window.addEventListener('resize', () => {
       setSizing()
-      build(data, topPlayers)
+      build()
     })
   })
 })(d3)

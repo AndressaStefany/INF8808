@@ -1,68 +1,52 @@
-
 /**
- * Sanitizes the names from the data in the "Player" column.
+ * Gets the names of the neighborhoods.
  *
- * Ensures each word in the name begins with an uppercase letter followed by lowercase letters.
- *
- * @param {object[]} data The dataset with unsanitized names
- * @returns {object[]} The dataset with properly capitalized names
+ * @param {object[]} data The data to analyze
+ * @returns {string[]} The names of the neighorhoods in the data set
  */
-export function cleanNames (data) {
-  // TODO: Clean the player name data
+export function getNeighborhoodNames (data) {
+  // TODO: Return the neihborhood names
   return []
 }
 
 /**
- * Finds the names of the 5 players with the most lines in the play.
+ * Filters the data by the given years.
  *
- * @param {object[]} data The dataset containing all the lines of the play
- * @returns {string[]} The names of the top 5 players with most lines
+ * @param {object[]} data The data to filter
+ * @param {number} start The start year (inclusive)
+ * @param {number} end The end year (inclusive)
+ * @returns {object[]} The filtered data
  */
-export function getTopPlayers (data) {
-  // TODO: Find the five top players with the most lines in the play
+export function filterYears (data, start, end) {
+  // TODO : Filter the data by years
   return []
 }
 
 /**
- * Transforms the data by nesting it, grouping by act and then by player, indicating the line count
- * for each player in each act.
+ * Summarizes how any trees were planted each year in each neighborhood.
  *
- * The resulting data structure ressembles the following :
- *
- * [
- *  { Act : ___,
- *    Players : [
- *     {
- *       Player : ___,
- *       Count : ___
- *     }, ...
- *    ]
- *  }, ...
- * ]
- *
- * The number of the act (starting at 1) follows the 'Act' key. The name of the player follows the
- * 'Player' key. The number of lines that player has in that act follows the 'Count' key.
- *
- * @param {object[]} data The dataset
- * @returns {object[]} The nested data set grouping the line count by player and by act
+ * @param {object[]} data The data set to use
+ * @returns {object[]} A table of objects with keys 'Arrond_Nom', 'Plantation_Year' and 'Counts', containing
+ * the name of the neighborhood, the year and the number of trees that were planted
  */
-export function summarizeLines (data) {
-  // TODO : Generate the data structure as defined above
+export function summarizeYearlyCounts (data) {
+  // TODO : Construct the required data table
   return []
 }
 
 /**
- * For each act, replaces the players not in the top 5 with a player named 'Other',
- * whose line count corresponds to the sum of lines uttered in the act by players other
- * than the top 5 players.
+ * For the heat map, fills empty values with zeros where a year is missing for a neighborhood because
+ * no trees were planted or the data was not entered that year.
  *
- * @param {object[]} data The dataset containing the count of lines of all players
- * @param {string[]} top The names of the top 5 players with the most lines in the play
- * @returns {object[]} The dataset with players not in the top 5 summarized as 'Other'
+ * @param {object[]} data The datas set to process
+ * @param {string[]} neighborhoods The names of the neighborhoods
+ * @param {number} start The start year (inclusive)
+ * @param {number} end The end year (inclusive)
+ * @param {Function} range A utilitary function that could be useful to get the range of years
+ * @returns {object[]} The data set with a new object for missing year and neighborhood combinations,
+ * where the values for 'Counts' is 0
  */
-export function replaceOthers (data, top) {
-  // TODO : For each act, sum the lines uttered by players not in the top 5 for the play
-  // and replace these players in the data structure by a player with name 'Other' and
-  // a line count corresponding to the sum of lines
+export function fillMissingData (data, neighborhoods, start, end, range) {
+  // TODO : Find missing data and fill with 0
   return []
 }

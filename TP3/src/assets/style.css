@@ -1,8 +1,8 @@
 body {
-    font-family: 'Montserrat', 'sans-serif';
+    font-family: 'Roboto Slab', 'sans-serif';
     font-size: 16px;
-    background-color: #EBF2FA;
-    color: #898989;
+    background-color: #fff;
+    color: #2A2B2E;
     margin: 0;
     height: 100vh;
     display: flex;
@@ -13,11 +13,7 @@ body {
 header {
     background-color: #fff;
     padding: 25px 100px;
-    margin: 0 25px 0 0;
-    border-width: 0 1px 1px 0; 
-    border-radius: 0 0 25px 0;
-    border-style: solid;
-    border-color: black;
+    border-bottom: 2px solid #97939A;
 }
 
 main {
@@ -26,19 +22,21 @@ main {
 }
 
 h1 {
-    color: #EEB902;
-    font-family: 'Grenze Gotisch', 'serif';
+    color: #2A2B2E;
+    font-family: 'Roboto Slab', 'serif';
     font-size: 56px;
     margin: 0;
     font-weight: normal;
 }
 
 h2 {
+    color: #2A2B2E;
+    font-family: 'Roboto Slab', 'serif';
     font-weight: normal;
 }
 
-.main-svg {
-    background-color: #EBF2FA;
+svg {
+    background-color: #ffffff;
 }
 
 button {
@@ -77,40 +75,21 @@ button:hover, button:active {
     align-items: center;
 }
 
-.panel {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #fff;
-    padding: 25px 100px;
-    margin: 0 25px 0 0;
-    border-width: 1px 1px 0 0; 
-    border-radius: 0 25px 0 0;
-    border-style: solid;
-    border-color: black;
-}
+.tick line{
+    visibility: hidden;
+  }
 
-.legend-title {
-    font-weight: bold;
-}
+  .info {
+      pointer-events: none;
+      font-family: 'Roboto';
+  }
 
-.legend {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-}
+  .axis text {
+      font-family: 'Roboto';
+      cursor: default;
+      
+  }
 
-.legend-element {
-    display: flex;
-    padding: 10px;
-}
-
-#tooltip-title {
-    font-family: 'Grenze Gotisch';
-    font-weight: normal;
-    font-size: 24px;
-}
-
-.tooltip-value {
-    font-weight: normal;
-}
+  .axis path {
+      opacity: 0;
+  }

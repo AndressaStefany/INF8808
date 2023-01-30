@@ -1,6 +1,6 @@
 {
-  "name": "tp2",
-  "version": "1.0.1",
+  "name": "tp3",
+  "version": "1.0.2",
   "description": "TP pour le cours INF8808.",
   "main": "src/index.js",
   "scripts": {
@@ -11,9 +11,8 @@
   "author": "Olivia Gélinas",
   "license": "UNLICENSED",
   "dependencies": {
-    "@types/d3-tip": "^3.5.5",
     "d3": "^7.6.1",
-    "d3-tip": "^0.9.1",
+    "d3-scale-chromatic": "^1.5.0",
     "parcel-bundler": "^1.12.4",
     "parcel-plugin-static-files-copy": "^2.4.3"
   },
