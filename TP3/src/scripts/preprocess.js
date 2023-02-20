@@ -1,3 +1,4 @@
+import { range } from './util.js'
 /**
  * Gets the names of the neighborhoods.
  *
@@ -5,9 +6,10 @@
  * @returns {string[]} The names of the neighorhoods in the data set
  */
 export function getNeighborhoodNames (data) {
-  // TODO: Return the neihborhood names
-  return []
+  const neighborhoodNames = [...new Set(data.map(d => d.Arrond_Nom))];
+  return neighborhoodNames;
 }
+
 
 /**
  * Filters the data by the given years.
@@ -18,8 +20,11 @@ export function getNeighborhoodNames (data) {
  * @returns {object[]} The filtered data
  */
 export function filterYears (data, start, end) {
-  // TODO : Filter the data by years
-  return []
+  const filteredData = data.filter(d => {
+    const year = new Date(d.Date_Plantation).getFullYear();
+    return year >= start && year <= end;
+  });
+  return filteredData;
 }
 
 /**
@@ -30,8 +35,28 @@ export function filterYears (data, start, end) {
  * the name of the neighborhood, the year and the number of trees that were planted
  */
 export function summarizeYearlyCounts (data) {
-  // TODO : Construct the required data table
-  return []
+  const neighborhoods = [...new Set(data.map(d => d.Arrond_Nom))];
+  const years = [...new Set(data.map(d => new Date(d.Date_Plantation).getFullYear()))];
+  const result = [];
+
+  for (const neighborhood of neighborhoods) {
+    for (const year of years) {
+      const count = data.reduce((acc, d) => {
+        const dYear = new Date(d.Date_Plantation).getFullYear();
+        if (d.Arrond_Nom === neighborhood && dYear === year) {
+          acc += 1;
+        }
+        return acc;
+      }, 0);
+      result.push({
+        Arrond_Nom: neighborhood,
+        Plantation_Year: year,
+        Comptes: count,
+      });
+    }
+  }
+
+  return result;
 }
 
 /**
@@ -47,6 +72,14 @@ export function summarizeYearlyCounts (data) {
  * where the values for 'Counts' is 0
  */
 export function fillMissingData (data, neighborhoods, start, end, range) {
-  // TODO : Find missing data and fill with 0
-  return []
+  const years = range(start, end);
+
+  neighborhoods.forEach(neighborhood => {
+    years.forEach(year => {
+      const found = data.find(d => d.Arrond_Nom === neighborhood && d.Plantation_Year === year);
+      data.push(found ? found : { Arrond_Nom: neighborhood, Plantation_Year: year, Comptes: 0 });
+    });
+  });
+
+  return data;
 }
