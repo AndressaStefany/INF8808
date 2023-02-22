@@ -55,4 +55,19 @@ export function initLegendAxis () {
  */
 export function draw (x, y, height, width, fill, colorScale) {
   // TODO : Draw the legend
+  const legend = d3.selectAll('.legend')
+
+  legend.append('rect')
+    .attr('x', x)
+    .attr('y', y)
+    .attr('width', width)
+    .attr('height', height)
+    .attr('fill', fill)
+    .append('div')
+    // .append('text')
+    // .append('text-anchor', 'end')
+    // .append('tickFormat', '.0f')
+    // .append('tickValues', function (d) {
+    //   return colorScale(d)
+    // })
 }
