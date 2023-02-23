@@ -55,7 +55,6 @@ export function initLegendAxis () {
  */
 export function draw (x, y, height, width, fill, colorScale) {
   // TODO : Draw the legend
-  console.log('x', x, 'y', y, 'height', height, 'width', width)
   // draw the rectangle for the legend
   const bar = d3.selectAll('.legend.bar')
   bar.attr('x', x)
@@ -68,10 +67,8 @@ export function draw (x, y, height, width, fill, colorScale) {
   const yScale = d3.scaleLinear()
     .range([height, 0])
     .domain(d3.extent(colorScale.domain()))
-    // .ticks(10)
 
   // create the axis for the legend
-  // const yAxis = d3.axisBottom(yScale)
   const yAxis = d3.axisLeft(yScale)
 
   // add the axis to the group
