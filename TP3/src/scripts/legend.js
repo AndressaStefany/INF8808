@@ -55,19 +55,28 @@ export function initLegendAxis () {
  */
 export function draw (x, y, height, width, fill, colorScale) {
   // TODO : Draw the legend
-  const legend = d3.selectAll('.legend')
-
-  legend.append('rect')
-    .attr('x', x)
+  console.log('x', x, 'y', y, 'height', height, 'width', width)
+  // draw the rectangle for the legend
+  const bar = d3.selectAll('.legend.bar')
+  bar.attr('x', x)
     .attr('y', y)
     .attr('width', width)
     .attr('height', height)
-    .attr('fill', fill)
-    .append('div')
-    // .append('text')
-    // .append('text-anchor', 'end')
-    // .append('tickFormat', '.0f')
-    // .append('tickValues', function (d) {
-    //   return colorScale(d)
-    // })
+    .style('fill', fill)
+
+  // create a scale to map the continuous color values to positions
+  const yScale = d3.scaleLinear()
+    .range([height, 0])
+    .domain(d3.extent(colorScale.domain()))
+    // .ticks(10)
+
+  // create the axis for the legend
+  // const yAxis = d3.axisBottom(yScale)
+  const yAxis = d3.axisLeft(yScale)
+
+  // add the axis to the group
+  const axisLegend = d3.selectAll('.legend.axis')
+  axisLegend
+    .attr('transform', 'translate(' + x + ',' + y + ')')
+    .call(yAxis)
 }
