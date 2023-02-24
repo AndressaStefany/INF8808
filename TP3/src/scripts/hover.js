@@ -14,6 +14,20 @@
  */
 export function setRectHandler (xScale, yScale, rectSelected, rectUnselected, selectTicks, unselectTicks) {
   // TODO : Select the squares and set their event handlers
+  d3.select('rect')
+    .on('mouseover', function (d) {
+      rectSelected()
+      selectTicks()
+    })
+    .on('mouseout', function (d) {
+      rectUnselected()
+      unselectTicks()
+    })
+    .on('mousemove', function (d) {
+      d3.select('#text')
+        .attr('x', xScale(d.x))
+        .attr('y', yScale(d.y))
+    })
 }
 
 /**
@@ -29,8 +43,25 @@ export function setRectHandler (xScale, yScale, rectSelected, rectUnselected, se
  */
 export function rectSelected (element, xScale, yScale) {
   // TODO : Display the number of trees on the selected element
-  // Make sure the nimber is centered. If there are 1000 or more
+  // Make sure the number is centered. If there are 1000 or more
   // trees, display the text in white so it contrasts with the background.
+  const text = element.each(function (d) {
+    d3.select(this)
+      .select('text')
+      .text(d.trees)
+      .style('text-anchor', 'middle')
+      .style('font-size', '12px') // precisa?
+      .style('fill', d.trees >= 1000 ? 'white' : 'black')
+      .attr('x', xScale(d.x) + xScale.bandwidth() / 2)
+      .attr('y', yScale(d.y) + yScale.bandwidth() / 2)
+
+    const bbox = text.getBBox()
+
+    d3.select(text)
+      .attr('transform', 'translate(' + (-bbox.width / 2) + ',' + (bbox.height / 4) + ')')
+    d3.select(this)
+      .style('opacity', 0.75)
+  })
 }
 
 /**
@@ -44,6 +75,16 @@ export function rectSelected (element, xScale, yScale) {
  */
 export function rectUnselected (element) {
   // TODO : Unselect the element
+  element.each(function () {
+    // remove the text indicating the number
+    d3.select(this)
+      .select('text')
+      .remove()
+
+    // set the opacity to 100%
+    d3.select(this)
+      .style('opacity', 1)
+  })
 }
 
 /**
@@ -54,6 +95,11 @@ export function rectUnselected (element) {
  */
 export function selectTicks (name, year) {
   // TODO : Make the ticks bold
+  d3.selectAll('.tick text')
+    .filter(function () {
+      return d3.select(this).text() === name && d3.select(this.parentNode).datum() === year
+    })
+    .style('font-weight', 'bold')
 }
 
 /**
@@ -61,4 +107,6 @@ export function selectTicks (name, year) {
  */
 export function unselectTicks () {
   // TODO : Unselect the ticks
+  d3.selectAll('.tick text')
+    .style('font-weight', 'normal')
 }
