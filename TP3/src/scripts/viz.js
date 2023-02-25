@@ -6,8 +6,8 @@
  */
 export function setColorScaleDomain (colorScale, data) {
   // TODO : Set domain of color scale
-  const min = d3.min(data, function(param) {return param.Comptes})
-  const max = d3.max(data, function(param) {return param.Comptes})
+  const min = d3.min(data, function (param) { return param.Comptes })
+  const max = d3.max(data, function (param) { return param.Comptes })
 
   colorScale.domain([min, max])
 }
@@ -32,8 +32,8 @@ export function appendRects (data) {
  */
 export function updateXScale (xScale, data, width, range) {
   // TODO : Update X scale
-  const min = d3.min(data, function(param) {return param.Plantation_Year})
-  const max = d3.max(data, function(param) {return param.Plantation_Year})
+  const min = d3.min(data, function (param) { return param.Plantation_Year })
+  const max = d3.max(data, function (param) { return param.Plantation_Year })
 
   xScale.domain(range(min, max)).range([0, width])
 }
@@ -48,7 +48,6 @@ export function updateXScale (xScale, data, width, range) {
 export function updateYScale (yScale, neighborhoodNames, height) {
   // TODO : Update Y scale
   // Make sure to sort the neighborhood names alphabetically
-  // descending?? Check later
   yScale.domain(neighborhoodNames.sort(d3.descending)).range([height, 0])
 }
 
@@ -102,9 +101,9 @@ export function rotateYTicks () {
 export function updateRects (xScale, yScale, colorScale) {
   // TODO : Set position, size and fill of rectangles according to bound data
   d3.select('#graph-g').selectAll('.tile')
-    .attr('x', function(param) {return xScale(param.Plantation_Year)})
-    .attr('y', function(param) {return yScale(param.Arrond_Nom)})
-    .attr('fill', function(param) {return colorScale(param.Comptes)})
+    .attr('x', function (param) { return xScale(param.Plantation_Year) })
+    .attr('y', function (param) { return yScale(param.Arrond_Nom) })
+    .attr('fill', function (param) { return colorScale(param.Comptes) })
     .attr('width', xScale.bandwidth())
     .attr('height', yScale.bandwidth())
 }
