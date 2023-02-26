@@ -16,16 +16,16 @@ export function setRectHandler (xScale, yScale, rectSelected, rectUnselected, se
   // TODO : Select the squares and set their event handlers
   d3.selectAll('rect.tile')
     .on('mouseover', function () {
-      const rect = d3.select(this)
+      const rect = this
       rectSelected(rect, xScale, yScale)
 
-      const name = rect.datum().Arrond_Nom
-      const year = rect.datum().Plantation_Year
+      const name = d3.select(this).datum().Arrond_Nom
+      const year = d3.select(this).datum().Plantation_Year
       selectTicks(name, year)
     })
     .on('mouseout', function () {
-      const rect = d3.select(this)
-      rectUnselected(rect)
+      const g = this.parentNode
+      rectUnselected(g)
       unselectTicks()
     })
 }
@@ -45,20 +45,29 @@ export function rectSelected (element, xScale, yScale) {
   // TODO : Display the number of trees on the selected element
   // Make sure the number is centered. If there are 1000 or more
   // trees, display the text in white so it contrasts with the background.
-  var xPosition = parseFloat(element.attr('x')) + xScale.bandwidth() / 2
-  var yPosition = parseFloat(element.attr('y')) + yScale.bandwidth() / 2
+  const fontSize = 10
+  const g = element.parentNode
+  const rect = d3.select(element)
+  const xPosition = parseFloat(rect.attr('x')) + xScale.bandwidth() / 2
+  const yPosition = parseFloat(rect.attr('y')) + yScale.bandwidth() / 2 + fontSize / 2
+  const treeCount = d3.select(element).datum().Comptes
 
-  element
-    .attr('opacity', 0.75)
+  // add the number of trees
+  d3.select(g)
     .append('text')
-    .attr('id', 'tooltip')
+    .text(treeCount)
+    .attr('class', 'tree-count')
     .attr('x', xPosition)
     .attr('y', yPosition)
-    .attr('font-size', '12px')
+    .attr('font-size', '10px')
     .attr('text-anchor', 'middle')
+    .attr('font-family', 'sans-serif')
     .attr('font-weight', 'bold')
-    .attr('fill', element.datum().Comptes >= 1000 ? 'white' : 'black')
-    .text(element.datum().Comptes)
+    .attr('fill', treeCount >= 1000 ? 'white' : 'black')
+
+  // set the opacity of the rect
+  rect
+    .attr('opacity', 0.75)
 }
 
 /**
@@ -72,11 +81,15 @@ export function rectSelected (element, xScale, yScale) {
  */
 export function rectUnselected (element) {
   // TODO : Unselect the element
-  // change the opacity and remove the tooltip
-  element
-    .attr('opacity', 1)
+  // remove the tooltip
+  d3.select(element)
     .select('text')
     .remove()
+
+  // change the opacity
+  d3.select(element)
+    .select('rect')
+    .attr('opacity', 1)
 }
 
 /**
