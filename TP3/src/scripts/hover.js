@@ -14,19 +14,19 @@
  */
 export function setRectHandler (xScale, yScale, rectSelected, rectUnselected, selectTicks, unselectTicks) {
   // TODO : Select the squares and set their event handlers
-  d3.select('rect')
-    .on('mouseover', function (d) {
-      rectSelected()
-      selectTicks()
+  d3.selectAll('rect.tile')
+    .on('mouseover', function () {
+      const rect = d3.select(this)
+      rectSelected(rect, xScale, yScale)
+
+      const name = rect.datum().Arrond_Nom
+      const year = rect.datum().Plantation_Year
+      selectTicks(name, year)
     })
-    .on('mouseout', function (d) {
-      rectUnselected()
+    .on('mouseout', function () {
+      const rect = d3.select(this)
+      rectUnselected(rect)
       unselectTicks()
-    })
-    .on('mousemove', function (d) {
-      d3.select('#text')
-        .attr('x', xScale(d.x))
-        .attr('y', yScale(d.y))
     })
 }
 
@@ -45,23 +45,20 @@ export function rectSelected (element, xScale, yScale) {
   // TODO : Display the number of trees on the selected element
   // Make sure the number is centered. If there are 1000 or more
   // trees, display the text in white so it contrasts with the background.
-  const text = element.each(function (d) {
-    d3.select(this)
-      .select('text')
-      .text(d.trees)
-      .style('text-anchor', 'middle')
-      .style('font-size', '12px') // precisa?
-      .style('fill', d.trees >= 1000 ? 'white' : 'black')
-      .attr('x', xScale(d.x) + xScale.bandwidth() / 2)
-      .attr('y', yScale(d.y) + yScale.bandwidth() / 2)
+  var xPosition = parseFloat(element.attr('x')) + xScale.bandwidth() / 2
+  var yPosition = parseFloat(element.attr('y')) + yScale.bandwidth() / 2
 
-    const bbox = text.getBBox()
-
-    d3.select(text)
-      .attr('transform', 'translate(' + (-bbox.width / 2) + ',' + (bbox.height / 4) + ')')
-    d3.select(this)
-      .style('opacity', 0.75)
-  })
+  element
+    .attr('opacity', 0.75)
+    .append('text')
+    .attr('id', 'tooltip')
+    .attr('x', xPosition)
+    .attr('y', yPosition)
+    .attr('font-size', '12px')
+    .attr('text-anchor', 'middle')
+    .attr('font-weight', 'bold')
+    .attr('fill', element.datum().Comptes >= 1000 ? 'white' : 'black')
+    .text(element.datum().Comptes)
 }
 
 /**
@@ -75,16 +72,11 @@ export function rectSelected (element, xScale, yScale) {
  */
 export function rectUnselected (element) {
   // TODO : Unselect the element
-  element.each(function () {
-    // remove the text indicating the number
-    d3.select(this)
-      .select('text')
-      .remove()
-
-    // set the opacity to 100%
-    d3.select(this)
-      .style('opacity', 1)
-  })
+  // change the opacity and remove the tooltip
+  element
+    .attr('opacity', 1)
+    .select('text')
+    .remove()
 }
 
 /**
@@ -97,9 +89,15 @@ export function selectTicks (name, year) {
   // TODO : Make the ticks bold
   d3.selectAll('.tick text')
     .filter(function () {
-      return d3.select(this).text() === name && d3.select(this.parentNode).datum() === year
+      return d3.select(this).text() === name
     })
-    .style('font-weight', 'bold')
+    .attr('font-weight', 'bold')
+
+  d3.selectAll('.tick text')
+    .filter(function () {
+      return d3.select(this).datum() === year
+    })
+    .attr('font-weight', 'bold')
 }
 
 /**
@@ -108,5 +106,5 @@ export function selectTicks (name, year) {
 export function unselectTicks () {
   // TODO : Unselect the ticks
   d3.selectAll('.tick text')
-    .style('font-weight', 'normal')
+    .attr('font-weight', 'normal')
 }
