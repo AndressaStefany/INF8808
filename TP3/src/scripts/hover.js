@@ -16,11 +16,10 @@ export function setRectHandler (xScale, yScale, rectSelected, rectUnselected, se
   // TODO : Select the squares and set their event handlers
   d3.selectAll('rect.tile')
     .on('mouseover', function () {
-      const rect = this
-      rectSelected(rect, xScale, yScale)
-
       const name = d3.select(this).datum().Arrond_Nom
       const year = d3.select(this).datum().Plantation_Year
+
+      rectSelected(this, xScale, yScale)
       selectTicks(name, year)
     })
     .on('mouseout', function () {
@@ -50,7 +49,7 @@ export function rectSelected (element, xScale, yScale) {
   const rect = d3.select(element)
   const xPosition = parseFloat(rect.attr('x')) + xScale.bandwidth() / 2
   const yPosition = parseFloat(rect.attr('y')) + yScale.bandwidth() / 2 + fontSize / 2
-  const treeCount = d3.select(element).datum().Comptes
+  const treeCount = rect.datum().Comptes
 
   // add the number of trees
   d3.select(g)
@@ -66,8 +65,8 @@ export function rectSelected (element, xScale, yScale) {
     .attr('fill', treeCount >= 1000 ? 'white' : 'black')
 
   // set the opacity of the rect
-  rect
-    .attr('opacity', 0.75)
+  rect.transition()
+    .style('opacity', 0.75)
 }
 
 /**
@@ -81,7 +80,7 @@ export function rectSelected (element, xScale, yScale) {
  */
 export function rectUnselected (element) {
   // TODO : Unselect the element
-  // remove the tooltip
+  // remove the text
   d3.select(element)
     .select('text')
     .remove()
@@ -89,7 +88,8 @@ export function rectUnselected (element) {
   // change the opacity
   d3.select(element)
     .select('rect')
-    .attr('opacity', 1)
+    .transition()
+    .style('opacity', 1)
 }
 
 /**
