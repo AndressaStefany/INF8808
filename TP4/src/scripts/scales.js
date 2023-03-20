@@ -33,9 +33,7 @@ export function setColorScale (data) {
     continents.add(country.Continent);
   });
   
-  const continentScale = d3.scaleOrdinal()
-    .domain([...continents].sort())
-    .range(d3.schemeCategory10);
+  const continentScale = d3.scaleOrdinal(d3.schemeSet1).domain(continents)
   
   return continentScale;
 }
