@@ -9,9 +9,9 @@
  * @returns {*} The linear scale used to determine the radius
  */
 export function setRadiusScale (data) {
-  const populations = [...data['2000'], ...data['2015']].map((d) => d.Population);
-  
-  const populationScale = d3.scaleLinear().domain([d3.min(populations), d3.max(populations)]).range([5,20])
+  const populations = [...data['2000'], ...data['2015']].map((d) => d.Population)
+
+  const populationScale = d3.scaleLinear().domain([d3.min(populations), d3.max(populations)]).range([5, 20])
 
   return populationScale
 }
@@ -30,12 +30,12 @@ export function setColorScale (data) {
   const continents = new Set();
 
   [...data['2000'], ...data['2015']].forEach((country) => {
-    continents.add(country.Continent);
-  });
-  
+    continents.add(country.Continent)
+  })
+
   const continentScale = d3.scaleOrdinal(d3.schemeSet1).domain(continents)
-  
-  return continentScale;
+
+  return continentScale
 }
 
 /**
@@ -46,13 +46,13 @@ export function setColorScale (data) {
  * @returns {*} The linear scale in X
  */
 export function setXScale (width, data) {
-  const gdps = [...data['2000'], ...data['2015']].map((d) => d.GDP);
+  const gdps = [...data['2000'], ...data['2015']].map((d) => d.GDP)
 
   const gdpScale = d3.scaleLog()
     .domain([d3.min(gdps), d3.max(gdps)])
-    .range([0, width]);
-  
-  return gdpScale;
+    .range([0, width])
+
+  return gdpScale
 }
 
 /**
@@ -63,11 +63,11 @@ export function setXScale (width, data) {
  * @returns {*} The linear scale in Y
  */
 export function setYScale (height, data) {
-  const co2s = [...data['2000'], ...data['2015']].map((d) => d.CO2);
+  const co2s = [...data['2000'], ...data['2015']].map((d) => d.CO2)
 
   const co2Scale = d3.scaleLog()
     .domain([d3.min(co2s), d3.max(co2s)])
-    .range([height, 0]);
-  
-  return co2Scale;
+    .range([height, 0])
+
+  return co2Scale
 }
