@@ -1,0 +1,102 @@
+TP4 | INF8808
+In this notebook, we will start by creating a simple app to help explore our data. This step is important in conceiving data visualizations. It helps to determine which type of data visualization is appropriate for our data set, as well as which features we'd like to include.
+
+In the rest of this notebook, you will have to complete some cells to prepare for the implementation of an animated bubble chart in the next steps.
+
+To begin, take a look at the following cells, where the final result will be displayed. Note that typically code is written from bottom to top in Observable notebooks. Thus, it may be helpful to answer the questions in this notebook in reverse order.
+
+draw(2000, svg2000, xScale(), yScale())
+draw(2015, svg2015, xScale(), yScale())
+
+svg2015 = d3.create('svg').attr('viewBox', [0, 0, width, height]) 
+svg2000 = d3.create('svg').attr('viewBox', [0, 0, width, height])
+
+Given the data you have, you decide to create a simple scatter plot for each dataframe.
+
+In the next cells, fill the functions to accomplish this task.
+
+### Question 1
+For this part, complete the draw function in the cell below. This function should return the HTML element to display a scatter plot representing the data for the given year.
+
+The x and y axis should be drawn at the bottom and at the left of the scatter plot, respectively.
+
+The circles' fills should be black and their radius should be of size 1.
+
+The circles' center should be positioned according to the point's GDP in x and its CO2 emissions in y.
+
+function draw (year, g, xScale, yScale) {
+  // TODO : Draw scatter plot, including axes and circular markers
+  // Draw circles
+  g.selectAll("circle")
+    .data(countries[year])
+    .join("circle")
+      .attr("cx", d => xScale(d.GDP))
+      .attr("cy", d => yScale(d.CO2))
+      .attr("r", 1)
+      .attr("fill", "black")
+
+  // Draw axis
+  g.append("g")
+    .attr("class", "x axis")
+    .attr("transform", `translate(0, ${innerHeight})`)
+    .call(xAxis)
+  g.append("g")
+    .attr("class", "y axis")
+    .call(yAxis)
+  
+  return g.node()
+}
+
+In these next cells, we provide you with functions that may be called to draw the x and y axis on the graph. Of course, before these axes may be drawn, you will have to set the x and y scales using the provided functions below.
+
+xAxis = function drawXAxis () {
+  d3.selectAll('.x.axis')
+    .attr('transform', 'translate( 0, ' + (innerHeight + margin.top) + ')')
+    .call(d3.axisBottom(xScale()).ticks(10).tickSizeOuter(0))
+}
+
+yAxis = function drawYAxis () {
+  d3.selectAll('.y.axis')
+    .attr('transform', 'translate(' + margin.left + ', 0)')
+    .call(d3.axisLeft(yScale()).ticks(5).tickSizeOuter(0))
+}
+
+### Question 2
+In this next cell, implement the function to set the y scale for the graph. The y scale should represent the CO2 emissions and should have the same domain for both scatter plots, meaning it should represent the minimum and the maximum across both years.
+
+The range of the scatter plot should take into account the desired height of the scatter plot as well as its desired margins, defined below as margin.top, margin.bottom, and innerHeight.
+
+yScale = function setYScale () {
+  // TODO : Define the linear scale in y for the scatter plot
+  const co2Extent = d3.extent([...countries['2000'], ...countries['2015']].map((d) => d.CO2))
+  return d3.scaleLinear()
+    .domain(co2Extent)
+    .range([innerHeight + margin.top, margin.bottom])
+}
+
+### Question 3
+In this next cell, implement the function to set the x scale for the graph. The x scale should represent the GDP and should have the same domain for both scatter plots, meaning it should represent the minimum and the maximum across both years.
+
+The range of the scatter plot should take into account the desired width of the scatter plot as well as its desired margins, defined below as margin.left, margin.right, and innerWidth.
+
+xScale = function setXScale () {
+  // TODO : Define the linear scale in x for the scatter plot
+  const gdpExtent = d3.extent([...countries['2000'], ...countries['2015']].map((d) => d.GDP))
+
+  return d3.scaleLinear()
+    .domain(gdpExtent)
+    .range([margin.left, innerWidth + margin.right])
+}
+
+In the following cells, we implement some basic set-up for the visualization. The sizing of the SVG and the inner sizing of its scatter plot are calculated. Further, the data required for the scatter plots is loaded.
+
+countries = FileAttachment("countriesData.json").json()
+innerWidth = width - margin.left - margin.right
+innerHeight = height - margin.top - margin.bottom
+margin = ({top: 25, right: 20, bottom: 35, left: 40})
+height=200
+width=400
+d3 = require("d3@7")
+
+Next steps
+After this initial exploration step, you've decided you would like to implement this data visualization as a bubble chart with an animation to transition between the two years. You also would like to change the axes display to be log-scaled. You will reuse some of this code and complete the rest of the code provided with this TP to make these changes.
