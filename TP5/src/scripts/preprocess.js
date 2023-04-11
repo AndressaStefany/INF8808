@@ -1,3 +1,5 @@
+import rewind from '@turf/rewind'
+
 const TITLES = {
   '1. Noyau villageois': 'Noyau villageois',
   '2. Rue commerciale de quartier, d’ambiance ou de destination': 'Rue commerciale de quartier, d’ambiance ou de destination',
@@ -30,6 +32,13 @@ export function convertCoordinates (data, projection) {
       y:...
     }
   */
+  data.features.forEach((feature) => {
+    const coordinates = [feature.geometry.coordinates[0], feature.geometry.coordinates[1]]
+    const [x, y] = projection(coordinates)
+
+    feature.x = x
+    feature.y = y
+  })
 }
 
 /**
@@ -40,6 +49,22 @@ export function convertCoordinates (data, projection) {
  */
 export function simplifyDisplayTitles (data) {
   // TODO : Simplify the titles as required
+  const updateFeatures = (data) => {
+    const featureTypes = data.features.map(feature => feature.properties.TYPE_SITE_INTERVENTION)
+
+    const updatedTypes = featureTypes.map(featureType => TITLES[featureType])
+
+    data.features.forEach((feature, index) => {
+      feature.properties.TYPE_SITE_INTERVENTION = updatedTypes[index]
+    })
+    data.features.sort((a, b) => {
+      const typeA = a.properties.TYPE_SITE_INTERVENTION
+      const typeB = b.properties.TYPE_SITE_INTERVENTION
+      return typeA.localeCompare(typeB)
+    })
+  }
+
+  updateFeatures(data)
 }
 
 /**
@@ -48,6 +73,7 @@ export function simplifyDisplayTitles (data) {
  * @param {*} data The data to be displayed
  * @returns {*} The GeoJson data with reversed coordinates.
  */
- export function reverseGeoJsonCoordinates (data) {
+export function reverseGeoJsonCoordinates (data) {
   // TODO : Rewind the GeoJso data.
+  return rewind(data, { reverse: true })
 }
