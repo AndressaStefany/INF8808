@@ -45,10 +45,26 @@ import * as tooltip from './scripts/tooltip.js'
     // build(newData, visualization, transitionDuration, colorScale, xScale, yScale)
   })
 
-  d3.csv('./ballondor.csv').then((data) => {
-    // TODO
+  // Define an array of file paths for the CSV files
+  const playTimePaths = helper.listOfPlayTimeCSVs()
+  var filePaths = ['./ballondor.csv', './positions.csv'].concat(playTimePaths)
+  Promise.all(filePaths.map(function (filePath) {
+    return d3.csv(filePath)
+  })).then(function (dataArray) {
     const visualization = 3
-    // const newData = preprocess.function(data)
+    // Extract the loaded data from ballonDorData and positionsData files
+    const ballonDorData = dataArray[0]
+    const positionsData = dataArray[1]
+    var mergedData = preprocess.mergeDataByKeys(ballonDorData, positionsData, 'player', 'player')
+    mergedData = preprocess.addCodePlayerColumn(mergedData, 'codePlayer')
+
+    // Extract the loaded data from Playing Time files
+    // and get the minutes and games of players
+    const PlayingTimeArrays = dataArray.slice(2)
+    var minutesAndGames = preprocess.getMinutesGames(playTimePaths, PlayingTimeArrays)
+
+    var viz3Data = preprocess.mergeDataByKeys(mergedData, minutesAndGames, 'codePlayer', 'codePlayer')
+    console.log('viz3Data', viz3Data)
 
     // viz.function(...)
 
@@ -56,7 +72,11 @@ import * as tooltip from './scripts/tooltip.js'
 
     setSizing()
     // build(newData, visualization, transitionDuration, colorScale, xScale, yScale)
+  }).catch(function (error) {
+    // Handle any errors that may occur while loading the CSV files
+    console.error('Error loading CSV files (viz3):', error)
   })
+
   d3.csv('./ballondor.csv').then((data) => {
     // TODO
     const visualization = 4
@@ -69,8 +89,6 @@ import * as tooltip from './scripts/tooltip.js'
     setSizing()
     // build(newData, visualization, transitionDuration, colorScale, xScale, yScale)
   })
-
-  
   /**
    *   This function handles the graph's sizing.
    */
