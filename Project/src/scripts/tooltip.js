@@ -1,27 +1,33 @@
 /**
+ * Viz 3:
  * Defines the contents of the tooltip.
  *
  * @param {object} d The data associated to the hovered element
  * @returns {string} The tooltip contents
  */
-export function getContents (d) {
-  const tooltip = d3.create()
+export function getContentsViz3 (d) {
+  const createDataItem = (label, value) => ({ label, value })
+  const data = [
+    createDataItem('Player: ', d.player),
+    createDataItem('Year: ', d.year),
+    createDataItem('Games: ', d.games),
+    createDataItem('Minutes: ', d.minutes),
+    createDataItem('Position: ', d.position)
+  ]
 
-  tooltip.append('div')
-    .append('text')
-    .style('font-size', '24px')
-    .style('font-family', 'Grenze Gotisch')
-    .style('font-weight', 'bold')
-    .text(d.target.__data__.Player) // here will change
-    .append('p')
+  const createContent = (data) => {
+    const container = d3.create('div')
+    data.forEach(({ label, value }) => {
+      const itemContainer = container.append('div')
+      itemContainer.append('span')
+        .attr('class', 'tooltip-label')
+        .text(label)
+      itemContainer.append('span')
+        .attr('class', 'tooltip-value')
+        .text(value)
+    })
+    return container.html()
+  }
 
-  tooltip.append('div')
-    .append('text')
-    .style('font-weight', 'normal')
-    .text(d.target.__data__.Count) // here will change
-    .append('b')
-    .style('font-weight', 'normal')
-    .text(' lines')
-
-  return tooltip.html()
+  return createContent(data)
 }
