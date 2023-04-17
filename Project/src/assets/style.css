@@ -62,8 +62,8 @@ button:hover, button:active {
 #marker-g circle {
     cursor: pointer;
 }
-
-#graph-g .title {
+/* maybe change here #viz3 */
+.title {
     font-size: 1.2em;
     font-weight: bold;
   }

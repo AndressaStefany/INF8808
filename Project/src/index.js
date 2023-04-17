@@ -70,8 +70,8 @@ import d3Tip from 'd3-tip'
 
     var viz3Data = preprocess.mergeDataByKeys(mergedData, minutesAndGames, 'codePlayer', 'codePlayer')
 
-    // viz
-    const g = helper.generateG(margin)
+    // viz 3
+    const g = helper.generateG(margin, 'viz3')
 
     const tip = d3Tip().attr('class', 'd3-tip')
       .html(function (d) {

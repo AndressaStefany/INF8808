@@ -2,13 +2,14 @@
  * Generates the SVG element g which will contain the data visualisation.
  *
  * @param {object} margin The desired margins around the graph
+ * @param {string} id The id of the graph
  * @returns {*} The d3 Selection for the created g element
  */
-export function generateG (margin) {
+export function generateG (margin, id) {
   return d3.select('.graph')
     .select('svg')
     .append('g')
-    .attr('id', 'graph-g')
+    .attr('id', id)
     .attr('transform',
       'translate(' + margin.left + ',' + margin.top + ')')
 }

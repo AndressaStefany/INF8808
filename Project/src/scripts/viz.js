@@ -8,7 +8,7 @@ import { getContentsViz3 } from './tooltip'
  * @param {*} colorScale The scale for the circles' color
  */
 export function drawCircles (data, rScale, colorScale) {
-  d3.select('#graph-g').append('g').attr('id', 'circles')
+  d3.select('#viz3').append('g').attr('id', 'circles')
 
   d3.select('#circles')
     .selectAll('circle')
@@ -91,7 +91,7 @@ export function moveCircles (xScale, yScale, transitionDuration) {
  */
 export function setTitleTextViz3 () {
   const title = 'Relationship between winners, minutes and games played'
-  d3.select('#graph-g')
+  d3.select('#viz3')
     .selectAll('.title')
     .text(title)
 }
