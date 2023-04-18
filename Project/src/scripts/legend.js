@@ -12,7 +12,7 @@ export function drawLegend (colorScale, g, width) {
   colorScale.domain(domain)
 
   const legend = d3Legend.legendColor()
-    .title('Legend')
+    .title('Position')
     .shape('path', d3.symbol().type(d3.symbolCircle).size(300)())
     .scale(colorScale)
 
