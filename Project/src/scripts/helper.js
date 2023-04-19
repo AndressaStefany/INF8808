@@ -6,7 +6,7 @@
  * @returns {*} The d3 Selection for the created g element
  */
 export function generateG (margin, id) {
-  return d3.select('.graph')
+  return d3.select('#map-' + id)
     .select('svg')
     .append('g')
     .attr('id', id)
@@ -16,12 +16,12 @@ export function generateG (margin, id) {
 /**
  * Sets the size of the SVG canvas containing the graph.
  *
+ * @param {string} id The desired width
  * @param {number} width The desired width
  * @param {number} height The desired height
  */
-export function setCanvasSize (width, height) {
-  // the id (#) can be change
-  d3.select('#map').select('svg')
+export function setCanvasSize (id, width, height) {
+  d3.select(id).select('svg')
     .attr('width', width)
     .attr('height', height)
 }
@@ -42,9 +42,9 @@ export function appendAxes (g) {
 /**
  * Appends the labels for the the y axis and the title of the graph.
  *
+ * @param {*} g The d3 Selection of the graph's g SVG element
  * @param {string} labelX The text of the axis X
  * @param {string} labelY The text of the axis Y
- * @param {*} g The d3 Selection of the graph's g SVG element
  */
 export function appendGraphLabels (g, labelX, labelY) {
   g.append('text')
@@ -60,12 +60,11 @@ export function appendGraphLabels (g, labelX, labelY) {
 }
 
 /**
- * Viz 3:
  * Places the graph's title.
  *
  * @param {*} g The d3 Selection of the graph's g SVG element
  */
-export function placeTitleViz3 (g) {
+export function placeTitle (g) {
   g.append('text')
     .attr('class', 'title')
     .attr('x', 0)
@@ -74,30 +73,57 @@ export function placeTitleViz3 (g) {
 }
 
 /**
+ * Viz 4:
+ * Places the graph's title.
+ *
+ * @param {*} g The d3 Selection of the graph's g SVG element
+ */
+export function placeTitleViz4 (g) {
+  g.append('text')
+    .attr('class', 'title')
+    .attr('x', 0)
+    .attr('y', 0) // more high +, mora for go down in the page
+    .attr('font-size', 14)
+}
+
+/**
  * Viz 3:
  * Draws the X axis at the bottom of the diagram.
  *
+ * @param {*} g The d3 Selection of the graph's g SVG element
  * @param {*} xScale The scale to use to draw the axis
  * @param {number} height The height of the graphic
  */
-export function drawXAxisViz3 (xScale, height) {
+export function drawXAxis (g, xScale, height) {
   const xAxis = d3.axisBottom(xScale)
     .tickSizeOuter(0)
     .tickArguments([5, '~s'])
     .tickFormat(d3.format('d')) // specify the format as 'd' for integer
 
-  d3.select('.x.axis')
+  g.select('.x.axis')
     .attr('transform', 'translate(0, ' + height + ')')
     .call(xAxis)
 }
 
+// export function drawXAxisViz4 (xScale, height) {
+//   const xAxis = d3.axisBottom(xScale)
+//     .tickSizeOuter(0)
+//     .tickArguments([5, '~s'])
+//     .tickFormat(d3.format('d')) // specify the format as 'd' for integer
+
+//   d3.select('#viz4').select('.x.axis')
+//     .attr('transform', 'translate(0, ' + height + ')')
+//     .call(xAxis)
+// }
+
 /**
  * Draws the Y axis to the left of the diagram.
  *
+ * @param {*} g The d3 Selection of the graph's g SVG element
  * @param {*} yScale The scale to use to draw the axis
  */
-export function drawYAxisViz3 (yScale) {
-  d3.select('.y.axis')
+export function drawYAxis (g, yScale) {
+  g.select('.y.axis')
     .call(d3.axisLeft(yScale).tickSizeOuter(0).tickArguments([5, '.0r']))
 }
 

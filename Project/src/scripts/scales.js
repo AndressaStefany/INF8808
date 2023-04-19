@@ -36,14 +36,14 @@ export function setRadiusScale (data) {
 }
 
 /**
- * Viz 3:
+ * Viz 2, 3 and 4:
  * Defines the linear scale used to position the center of the circles in X.
  *
  * @param {number} width The width of the graph
  * @param {object} data The data to be used
  * @returns {*} The linear scale in X
  */
-export function setXScaleViz3 (width, data) {
+export function setXScaleYears (width, data) {
   const years = data.map((d) => d.year)
 
   const yearsScale = d3.scaleLinear()
@@ -69,4 +69,22 @@ export function setYScaleViz3 (height, data) {
     .range([height, 0])
 
   return minutesScale
+}
+
+/**
+ * Viz 4:
+ * Defines the log scale used to position in Y.
+ *
+ * @param {number} height The height of the graph
+ * @param {object} data The data to be used
+ * @returns {*} The linear scale in Y
+ */
+export function setYScaleViz4 (height, data) {
+  // const ages = data.map((d) => d.ages)
+
+  const agesScale = d3.scaleLinear()
+    .domain([0, 25])
+    .range([height, 0])
+
+  return agesScale
 }

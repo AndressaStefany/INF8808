@@ -4,11 +4,12 @@ import { getContentsViz3 } from './tooltip'
  * Draws the circles on the graph.
  *
  * @param {object} data The data to bind to
+ * @param {string} id The id of the graph
  * @param {*} rScale The scale for the circles' radius
  * @param {*} colorScale The scale for the circles' color
  */
-export function drawCircles (data, rScale, colorScale) {
-  d3.select('#viz3').append('g').attr('id', 'circles')
+export function drawCircles (data, id, rScale, colorScale) {
+  d3.select(id).append('g').attr('id', 'circles')
 
   d3.select('#circles')
     .selectAll('circle')
@@ -28,7 +29,7 @@ export function drawCircles (data, rScale, colorScale) {
  * @param {number} width The width of the graph
  * @param {number} height The height of the graph
  */
-export function positionLabelsViz3 (g, width, height) {
+export function positionLabels (g, width, height) {
   g.select('.x.axis-text')
     .attr('x', width / 2)
     .attr('y', height + 40)
@@ -72,12 +73,13 @@ export function setCircleHoverHandler (tip) {
  * Updates the position of the circles based on their bound data. The position
  * transitions gradually.
  *
+ * @param {*} g The d3 Selection of the graph's g SVG element
  * @param {*} xScale The x scale used to position the circles
  * @param {*} yScale The y scale used to position the circles
  * @param {number} transitionDuration The duration of the transition
  */
-export function moveCircles (xScale, yScale, transitionDuration) {
-  const circles = d3.selectAll('#circles circle')
+export function moveCircles (g, xScale, yScale, transitionDuration) {
+  const circles = g.selectAll('#circles circle')
 
   circles.transition()
     .duration(transitionDuration)
@@ -86,12 +88,13 @@ export function moveCircles (xScale, yScale, transitionDuration) {
 }
 
 /**
- * Viz 3:
  * Update the title of the graph.
+ *
+ * @param {string} id The id of the graph
+ * @param {string} text The text of the title
  */
-export function setTitleTextViz3 () {
-  const title = 'Relationship between winners, minutes and games played'
-  d3.select('#viz3')
+export function setTitleText (id, text) {
+  d3.select(id)
     .selectAll('.title')
-    .text(title)
+    .text(text)
 }
