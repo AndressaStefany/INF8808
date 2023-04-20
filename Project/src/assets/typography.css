@@ -23,3 +23,8 @@
        url('./fonts/oswald/oswald-v35-latin-regular.ttf') format('truetype'), /* Safari, Android, iOS */
        url('./fonts/oswald/oswald-v35-latin-regular.svg#Oswald') format('svg'); /* Legacy iOS */
 }
+
+@font-face{
+  font-family:'Montserrat';
+  src:url('./fonts/montserrat/Montserrat-ExtraBoldItalic.otf') format('otf');
+}
