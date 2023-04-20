@@ -11,11 +11,12 @@ body {
 
 header {
     margin: 0px;
+    background-color: #2E4F35;
 }
 
 main {
     height: 100%;
-    margin: 10px 50px;
+    /* margin: 10px 50px; */
 }
 
 img {
@@ -55,6 +56,7 @@ button:hover, button:active {
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 10px 50px;
 }
 
 #panel .theme {
@@ -83,3 +85,13 @@ button:hover, button:active {
     border-radius: 2px;
     pointer-events: none;
 }
+
+.light-background {
+    background-color: #EBEAEB;
+}
+
+.gray-background {
+    background-color: #d3d9d2 ;
+} 
+/* c7cbc6 */
+/* cfd4ce */
