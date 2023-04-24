@@ -322,7 +322,7 @@ import d3Tip from 'd3-tip'
    *
    */
   Promise.all(filePaths.map(function (filePath) {
-    return d3.csv(filePath) // to review the paths
+    return d3.csv(filePath)
   })).then(function (dataArray) {
     // Extract the loaded data from ballonDorData and positionsData files
     const ballonDorData = dataArray[0]
@@ -330,12 +330,7 @@ import d3Tip from 'd3-tip'
     var mergedData = preprocess.mergeDataByKeys(ballonDorData, positionsData, 'player', 'player')
     mergedData = preprocess.addCodePlayerColumn(mergedData, 'codePlayer')
 
-    // Extract the loaded data from Playing Time files
-    // and get the minutes and games of players
-    const PlayingTimeArrays = dataArray.slice(2)
-    var minutesAndGames = preprocess.getMinutesGames(playTimePaths, PlayingTimeArrays)
-
-    var viz4Data = preprocess.mergeDataByKeys(mergedData, minutesAndGames, 'codePlayer', 'codePlayer')
+    var viz4Data = preprocess.getAges(mergedData)
 
     // viz 4
     setSizing('#map-viz4')

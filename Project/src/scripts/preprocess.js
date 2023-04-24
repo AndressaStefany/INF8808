@@ -51,3 +51,15 @@ export function getMinutesGames (csvNames, csvFiles) {
   })
   return playerData
 }
+
+/**
+ * @param {object[]} data The data
+ * @returns {object[]} The data with the ages of players
+ */
+export function getAges (data) {
+  const playersWithAge = data.map(player => ({
+    ...player,
+    age: player.year - player.birth
+  }))
+  return playersWithAge
+}
