@@ -1,3 +1,4 @@
+/* eslint-disable no-trailing-spaces */
 'use strict'
 
 import * as helper from './scripts/helper.js'
@@ -31,33 +32,105 @@ import d3Tip from 'd3-tip'
   // Define an array of file paths for the CSV files
   const playTimePaths = helper.listOfPlayTimeCSVs()
   var filePaths = ['./ballondor.csv', './positions.csv'].concat(playTimePaths)
+  var worldPath = ['./custom.geo.json']
 
   /**
    * Visualization 1
    *
    */
-  d3.csv('./ballondor.csv').then((data) => {
-    // TODO
-    // Probably the csv will change, you can use Promise.all() for more than one csv
-    // const viz1Data = preprocess.function(data)
+  Promise.all(worldPath.map(function (filePath) {
+    return d3.json(filePath)
+  })).then(function (world) {
+    // viz 1
 
-    // viz.function(...)
+    setSizing('#map-viz1')
+    const g = helper.generateG(margin, 'viz1')
 
-    // legend.function(...)
+    // Load the GeoJSON file of the world's borders
 
-    // /**
-    //  * This function builds the graph.
-    //  *
-    //  * @param {*} variable The description...
-    //  */
-    // function build (...) {
-    //   // TODO
-    //   viz.function...(g, ...)
-    //   viz.setTitleText('#viz1', 'Vizualization 2')
-    // }
-    // build(...)
-    // viz.set???HoverHandler(tip)
+    // Create a projection to transform latitude and longitude coordinates to pixel coordinates
+
+    const projection = d3.geoMercator()
+      .fitSize([graphSize.width, graphSize.height], world[0])
+
+    // Create a path generator to convert GeoJSON objects to SVG paths
+    const pathGenerator = d3.geoPath().projection(projection)
+
+    // Create a new div element
+    const tooltip = document.createElement('div')
+
+    // Add some content to the div
+    tooltip.innerHTML = 'this is an example'
+
+    // Set the CSS styles for the div
+    tooltip.style.position = 'absolute'
+    tooltip.style.background = 'white'
+    tooltip.style.border = '1px solid black'
+    tooltip.style.padding = '10px'
+    tooltip.style.display = 'none'
+
+    // Add the div to the document body
+    document.body.appendChild(tooltip)
+
+    d3.csv('./country.csv').then(function (data) {
+      d3.csv('./ballondor.csv').then(function (data2) {
+      // data is an array of objects, where each object represents a country and its corresponding point value
+
+        // Define a color scale
+        const colorScale = d3.scaleSequential()
+          .interpolator(d3.interpolateBlues) // Define the range of colors to interpolate between
+          .domain([1, 7]) // Define the domain of values to map to the range of colors
+
+        // update the color of each path element based on its corresponding data point
+        g.selectAll('path')
+          .data(world[0].features)
+          .enter()
+          .append('path')
+          .attr('d', pathGenerator)
+          .style('stroke', 'black')
+          .style('stroke-width', '0.5px')
+          .style('fill', 'white')
+          .style('fill', function (d) {
+            const countryData = data.find(c => c.country === d.properties.admin)
+            if (countryData) {
+              return colorScale(+countryData.points)
+            } else {
+              return 'white' // or whatever default color you want to use
+            }
+          })
+          .on('mouseenter', function (d) {
+            tooltip.style.top = event.pageY + 'px'
+            tooltip.style.left = event.pageX + 'px'
+                
+            // Show the tooltip div
+            tooltip.style.display = 'block'
+          })
+          .on('mouseout', function (d) {
+            tooltip.style.display = 'none'
+          })
+      })
+    })
+  }).catch(function (error) {
+    // Handle any errors that may occur while loading the CSV files
+    console.error('Error loading CSV files (viz3):', error)
   })
+
+  // viz.function(...)
+
+  // legend.function(...)
+
+  // /**
+  //  * This function builds the graph.
+  //  *
+  //  * @param {*} variable The description...
+  //  */
+  // function build (...) {
+  //   // TODO
+  //   viz.function...(g, ...)
+  //   viz.setTitleText('#viz1', 'Vizualization 2')
+  // }
+  // build(...)
+  // viz.set???HoverHandler(tip)
 
   /**
    * Visualization 2
