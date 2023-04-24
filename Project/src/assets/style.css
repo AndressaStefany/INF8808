@@ -63,6 +63,11 @@ button:hover, button:active {
     padding-top : 25px;
 }
 
+path {
+    fill: #fff;
+}
+  
+
 #panel {
     cursor: default;
 }
