@@ -45,7 +45,6 @@ import d3Tip from 'd3-tip'
     // Load the GeoJSON file of the world's borders
 
     // Create a projection to transform latitude and longitude coordinates to pixel coordinates
-
     const projection = d3.geoMercator()
       .fitSize([graphSize.width, graphSize.height], world[0])
 
@@ -66,6 +65,7 @@ import d3Tip from 'd3-tip'
 
     // Add the div to the document body
     document.body.appendChild(tooltip)
+    // Add a click event listener to the document body
 
     d3.csv('./country.csv').then(function (data) {
       d3.csv('./ballondor.csv').then(function (data2) {
@@ -96,18 +96,43 @@ import d3Tip from 'd3-tip'
           .on('click', function (d, i) {
             // TODO
             const players = preprocess.getPlayersNames(data2, i.properties.admin)
+            if (players.length !== 0) {
+              tooltip.innerHTML = `
+            <div style="color: #FFF; background-color: #000; padding: 10px; border-radius: 5px;">
+              <h3 style="margin-top: 0;">${i.properties.admin}</h3>
+              <ul style="list-style: none; margin: 0; padding: 0;">
+                ${players.map(player => `
+                  <li style="padding: 5px 0;">
+                    <span style="color: #E60073; font-weight: bold;">${player.year}: </span>
+                    <span style="color: #FFF;">${player.player}</span>
+                    <span style="color: #E60073; font-style: italic;">(${player.club}, ${player.Nationality})</span>
+                  </li>
+                `).join('')}
+              </ul>
+            </div>
+          `       
+          
+              const closeButton = document.createElement('div')
+              closeButton.innerHTML = '&#10005;' // X symbol
+              closeButton.style.position = 'absolute'
+              closeButton.style.top = '1px'
+              closeButton.style.right = '11px'
+              closeButton.style.cursor = 'pointer'
+              closeButton.style.color = 'White'
+              closeButton.style.fontSize = '30px'
+              closeButton.style.fontWeight = 'bold'
+              tooltip.appendChild(closeButton)
 
-            const tooltipText = players
-              .map(entry => `<p>${entry.year} - ${entry.player} (${entry.Nationality}, ${entry.club})</p>`)
-              .join('')
-        
-            tooltip.innerHTML = tooltipText
+              closeButton.addEventListener('click', function () {
+                tooltip.style.display = 'none'
+              })
 
-            tooltip.style.top = event.pageY + 'px'
-            tooltip.style.left = event.pageX + 'px'
+              tooltip.style.top = event.pageY + 'px'
+              tooltip.style.left = event.pageX + 'px'
                 
-            // Show the tooltip div
-            tooltip.style.display = 'block'
+              // Show the tooltip div
+              tooltip.style.display = 'block'
+            }
           })
           .on('mouseout', function (d) {
 
