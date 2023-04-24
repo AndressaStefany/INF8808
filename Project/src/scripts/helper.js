@@ -68,7 +68,7 @@ export function placeTitle (g) {
   g.append('text')
     .attr('class', 'title')
     .attr('x', 0)
-    .attr('y', -20)
+    .attr('y', -50)
     .attr('font-size', 14)
 }
 
@@ -97,24 +97,13 @@ export function placeTitleViz4 (g) {
 export function drawXAxis (g, xScale, height) {
   const xAxis = d3.axisBottom(xScale)
     .tickSizeOuter(0)
-    .tickArguments([5, '~s'])
-    .tickFormat(d3.format('d')) // specify the format as 'd' for integer
+    .tickArguments([10, '~s'])
+    .tickFormat(d3.format('d'))
 
   g.select('.x.axis')
     .attr('transform', 'translate(0, ' + height + ')')
     .call(xAxis)
 }
-
-// export function drawXAxisViz4 (xScale, height) {
-//   const xAxis = d3.axisBottom(xScale)
-//     .tickSizeOuter(0)
-//     .tickArguments([5, '~s'])
-//     .tickFormat(d3.format('d')) // specify the format as 'd' for integer
-
-//   d3.select('#viz4').select('.x.axis')
-//     .attr('transform', 'translate(0, ' + height + ')')
-//     .call(xAxis)
-// }
 
 /**
  * Draws the Y axis to the left of the diagram.
@@ -125,6 +114,71 @@ export function drawXAxis (g, xScale, height) {
 export function drawYAxis (g, yScale) {
   g.select('.y.axis')
     .call(d3.axisLeft(yScale).tickSizeOuter(0).tickArguments([5, '.0r']))
+}
+
+/**
+ * Draws the button to toggle the display year.
+ *
+ * @param {*} g The d3 Selection of the graph's g SVG element
+ * @param {number} width The width of the graph, used to place the button
+ * @param {number} height The height of the graph
+ */
+export function drawButtons (g, width, height) {
+  // talvez seja append button, e nao g
+  const backButton = g.append('g')
+    .attr('class', 'button back')
+    .attr('transform', 'translate(' + (width / 2 - 100) + ',' + (height + 20) + ')')
+    .attr('width', 50)
+    .attr('height', 25)
+
+  backButton.append('rect')
+    .attr('width', 70)
+    .attr('height', 30)
+    .attr('fill', '#f4f6f4')
+    .on('mouseenter', function () {
+      d3.select(this).attr('stroke', '#362023')
+    })
+    .on('mouseleave', function () {
+      d3.select(this).attr('stroke', '#f4f6f4')
+    })
+
+  backButton.append('text')
+    .attr('x', 35)
+    .attr('y', 15)
+    .attr('text-anchor', 'middle')
+    .attr('dominant-baseline', 'middle')
+    .attr('class', 'button-text')
+    .text('<')
+    .attr('font-size', '10px')
+    .attr('fill', '#362023')
+
+  const forwardButton = g.append('g')
+    .attr('class', 'button forward')
+    .attr('transform', 'translate(' + (width / 2 + 50) + ',' + (height + 20) + ')')
+    .attr('width', 50)
+    .attr('height', 25)
+
+  forwardButton.append('rect')
+    .attr('width', 70)
+    .attr('height', 30)
+    .attr('fill', '#d3d9d2')
+    .attr('pointer-events', 'none')
+    .on('mouseenter', function () {
+      d3.select(this).attr('stroke', '#362023')
+    })
+    .on('mouseleave', function () {
+      d3.select(this).attr('stroke', '#f4f6f4')
+    })
+
+  forwardButton.append('text')
+    .attr('x', 35)
+    .attr('y', 15)
+    .attr('text-anchor', 'middle')
+    .attr('dominant-baseline', 'middle')
+    .attr('class', 'button-text')
+    .text('>')
+    .attr('font-size', '10px')
+    .attr('fill', '#362023')
 }
 
 /**

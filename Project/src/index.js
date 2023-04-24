@@ -23,6 +23,10 @@ import d3Tip from 'd3-tip'
     left: 80
   }
 
+  let currentYearViz3 = 2012
+  let currentYearViz4 = 2012
+  const years = [1956, 1960, 1970, 1980, 1990, 2000, 2010, 2012]
+
   let svgSize, graphSize
   // Define an array of file paths for the CSV files
   const playTimePaths = helper.listOfPlayTimeCSVs()
@@ -131,15 +135,18 @@ import d3Tip from 'd3-tip'
         return tooltip.getContentsViz3(d)
       })
     g.call(tip)
+
     helper.appendAxes(g)
     helper.appendGraphLabels(g, 'Years', 'Minutes played')
     helper.placeTitle(g, graphSize.width)
 
     viz.positionLabels(g, graphSize.width, graphSize.height)
 
+    helper.drawButtons(g, graphSize.width, graphSize.height)
+
     const radiusScale = scales.setRadiusScale(viz3Data)
     const colorScale = scales.setColorScale(viz3Data)
-    const xScale = scales.setXScaleYears(graphSize.width, viz3Data)
+    let xScale = scales.setXScaleYears(graphSize.width, viz3Data, currentYearViz3)
     const yScale = scales.setYScaleViz3(graphSize.height, viz3Data)
 
     helper.drawXAxis(g, xScale, graphSize.height)
@@ -147,28 +154,91 @@ import d3Tip from 'd3-tip'
 
     legend.drawLegend(colorScale, g, graphSize.width)
 
+    buildScatter(viz3Data, 0, currentYearViz3, radiusScale, colorScale, xScale, yScale)
+    viz.setCircleHoverHandler(tip)
+
+    setClickHandlerBack(g)
+    setClickHandlerForward(g)
+
     /**
      * This function builds the graph.
      *
      * @param {object} data The data to be used
      * @param {number} transitionDuration The duration of the transition while placing the circles
-     * @param {Array[]} years The year to be displayed
+     * @param {Array[]} year The year to be displayed
      * @param {*} rScale The scale for the circles' radius
      * @param {*} colorScale The scale for the circles' color
      * @param {*} xScale The x scale for the graph
      * @param {*} yScale The y scale for the graph
      */
-    function buildScatter (data, transitionDuration, years, rScale, colorScale, xScale, yScale) {
-      // then I have to change the range - years
-      viz.drawCircles(data, '#viz3', rScale, colorScale, xScale, yScale)
+    function buildScatter (data, transitionDuration, year, rScale, colorScale, xScale, yScale) {
+      const filteredData = data.filter(d => d.year > year && d.year <= year + 10)
+      viz.drawCircles(filteredData, '#viz3', rScale, colorScale, xScale, yScale)
       viz.moveCircles(g, xScale, yScale, transitionDuration)
       viz.setTitleText('#viz3', 'Relationship between winners, minutes and games played')
     }
-    // change it
-    const transitionDuration = 0
-    const years = [1960, 2000, 2021]
-    buildScatter(viz3Data, transitionDuration, years, radiusScale, colorScale, xScale, yScale)
-    viz.setCircleHoverHandler(tip)
+
+    /**
+     *   Sets up the click handler for the button. Aqui faz a mudança
+     *
+     *   @param {*} g The d3 Selection of the graph's g SVG element
+     */
+    function setClickHandlerBack (g) { // verificar se pode usar o g assim
+      const backButton = g.select('.button.back')
+
+      backButton
+        .on('click', () => {
+          // Activate the forward button
+          if (currentYearViz3 === years[years.length - 1]) {
+            g.select('.button.forward')
+              .select('rect')
+              .attr('pointer-events', null)
+              .attr('fill', '#f4f6f4')
+          }
+          currentYearViz3 = years[years.indexOf(currentYearViz3) - 1]
+          xScale = scales.setXScaleYears(graphSize.width, viz3Data, currentYearViz3)
+          helper.drawXAxis(g, xScale, graphSize.height)
+          buildScatter(viz3Data, 1000, currentYearViz3, radiusScale, colorScale, xScale, yScale)
+          // Disable the back button
+          if (currentYearViz3 === years[0]) {
+            backButton.select('rect')
+              .attr('pointer-events', 'none')
+              .attr('fill', '#d3d9d2')
+          }
+        }
+        )
+    }
+
+    /**
+     *   Sets up the click handler for the button. Aqui faz a mudança
+     *
+     *   @param {*} g The d3 Selection of the graph's g SVG element
+     */
+    function setClickHandlerForward (g) { // verificar se pode usar o g assim
+      const forwardButton = g.select('.button.forward')
+
+      forwardButton
+        .on('click', () => {
+          // Activate the back button
+          if (currentYearViz3 === years[0]) {
+            g.select('.button.back')
+              .select('rect')
+              .attr('pointer-events', null)
+              .attr('fill', '#f4f6f4')
+          }
+          currentYearViz3 = years[years.indexOf(currentYearViz3) + 1]
+          xScale = scales.setXScaleYears(graphSize.width, viz3Data, currentYearViz3)
+          helper.drawXAxis(g, xScale, graphSize.height)
+          buildScatter(viz3Data, 1000, currentYearViz3, radiusScale, colorScale, xScale, yScale)
+          // Disable the forward button
+          if (currentYearViz3 === years[years.length - 1]) {
+            forwardButton.select('rect')
+              .attr('pointer-events', 'none')
+              .attr('fill', '#d3d9d2')
+          }
+        }
+        )
+    }
   }).catch(function (error) {
     // Handle any errors that may occur while loading the CSV files
     console.error('Error loading CSV files (viz3):', error)
@@ -232,8 +302,7 @@ import d3Tip from 'd3-tip'
     }
     // change it
     const transitionDuration = 0
-    const years = [1960, 2000, 2021]
-    buildScatter(viz4Data, transitionDuration, years, xScale, yScale)
+    buildScatter(viz4Data, transitionDuration, currentYearViz4, xScale, yScale)
     // viz.setHoverHandler(tip)
   }).catch(function (error) {
     // Handle any errors that may occur while loading the CSV files

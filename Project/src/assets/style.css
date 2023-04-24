@@ -1,7 +1,7 @@
 body {
     font-family: 'Helvetica', 'sans-serif';
     font-size: 16px;
-    background-color: #ffffff;
+    background-color: #EBEAEB;
     color : #000000;
     margin: 0;
     height: 100vh;
@@ -56,7 +56,7 @@ button:hover, button:active {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 10px 50px;
+    /* padding: 30px 50px 0px 50px; */
 }
 
 #panel .theme {
@@ -74,6 +74,7 @@ button:hover, button:active {
 .title {
     font-size: 1.2em;
     font-weight: bold;
+    color: #3E5643 !important; /* didn't work*/
   }
 
 .d3-tip {
@@ -86,12 +87,10 @@ button:hover, button:active {
     pointer-events: none;
 }
 
-.light-background {
-    background-color: #EBEAEB;
-}
-
 .gray-background {
     background-color: #d3d9d2 ;
 } 
-/* c7cbc6 */
-/* cfd4ce */
+
+.main-svg {
+    margin-top: 30px;
+}

@@ -41,10 +41,12 @@ export function setRadiusScale (data) {
  *
  * @param {number} width The width of the graph
  * @param {object} data The data to be used
+ * @param {number} startYear The start year
  * @returns {*} The linear scale in X
  */
-export function setXScaleYears (width, data) {
-  const years = data.map((d) => d.year)
+export function setXScaleYears (width, data, startYear) {
+  const filteredData = data.filter(d => d.year >= startYear && d.year <= startYear + 10)
+  const years = filteredData.map((d) => d.year)
 
   const yearsScale = d3.scaleLinear()
     .domain([d3.min(years), d3.max(years)])
