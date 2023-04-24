@@ -252,11 +252,11 @@ import d3Tip from 'd3-tip'
     }
 
     /**
-     *   Sets up the click handler for the button. Aqui faz a mudança
+     *   Sets up the click handler for the button
      *
      *   @param {*} g The d3 Selection of the graph's g SVG element
      */
-    function setClickHandlerBack (g) { // verificar se pode usar o g assim
+    function setClickHandlerBack (g) {
       const backButton = g.select('.button.back')
 
       backButton
@@ -283,11 +283,11 @@ import d3Tip from 'd3-tip'
     }
 
     /**
-     *   Sets up the click handler for the button. Aqui faz a mudança
+     *   Sets up the click handler for the button
      *
      *   @param {*} g The d3 Selection of the graph's g SVG element
      */
-    function setClickHandlerForward (g) { // verificar se pode usar o g assim
+    function setClickHandlerForward (g) {
       const forwardButton = g.select('.button.forward')
 
       forwardButton

@@ -48,10 +48,17 @@ export function appendAxes (g) {
  */
 export function appendGraphLabels (g, labelX, labelY) {
   g.append('text')
-    .text(labelY)
     .attr('class', 'y axis-text')
-    .attr('transform', 'rotate(-90)')
+    .attr('text-anchor', 'middle')
+    .attr('transform', 'rotate(0)')
     .attr('font-size', 12)
+    .selectAll('tspan')
+    .data(labelY.split(' '))
+    .enter()
+    .append('tspan')
+    .text((d) => d)
+    .attr('dy', (d, i) => i * 20)
+    .attr('x', -60)
 
   g.append('text')
     .text(labelX)

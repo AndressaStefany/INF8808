@@ -18,6 +18,6 @@ export function drawLegend (colorScale, g, width) {
 
   g.append('g')
     .attr('class', 'legend')
-    .attr('transform', `translate(${width}, -20)`)
+    .attr('transform', `translate(${width + 100}, -20)`)
     .style('font-size', '12px').call(legend)
 }
