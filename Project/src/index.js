@@ -56,7 +56,6 @@ import d3Tip from 'd3-tip'
     const tooltip = document.createElement('div')
 
     // Add some content to the div
-    tooltip.innerHTML = 'this is an example'
 
     // Set the CSS styles for the div
     tooltip.style.position = 'absolute'
@@ -86,15 +85,24 @@ import d3Tip from 'd3-tip'
           .style('stroke', 'black')
           .style('stroke-width', '0.5px')
           .style('fill', 'white')
-          .style('fill', function (d) {
-            const countryData = data.find(c => c.country === d.properties.admin)
+          .style('fill', function (dd) {
+            const countryData = data.find(c => c.country === dd.properties.admin)
             if (countryData) {
               return colorScale(+countryData.points)
             } else {
               return 'white' // or whatever default color you want to use
             }
           })
-          .on('mouseenter', function (d) {
+          .on('click', function (d, i) {
+            // TODO
+            const players = preprocess.getPlayersNames(data2, i.properties.admin)
+
+            const tooltipText = players
+              .map(entry => `<p>${entry.year} - ${entry.player} (${entry.Nationality}, ${entry.club})</p>`)
+              .join('')
+        
+            tooltip.innerHTML = tooltipText
+
             tooltip.style.top = event.pageY + 'px'
             tooltip.style.left = event.pageX + 'px'
                 
@@ -102,13 +110,13 @@ import d3Tip from 'd3-tip'
             tooltip.style.display = 'block'
           })
           .on('mouseout', function (d) {
-            tooltip.style.display = 'none'
+
           })
       })
     })
   }).catch(function (error) {
     // Handle any errors that may occur while loading the CSV files
-    console.error('Error loading CSV files (viz3):', error)
+    console.error('Error loading CSV files (viz1):', error)
   })
 
   // viz.function(...)

@@ -51,3 +51,18 @@ export function getMinutesGames (csvNames, csvFiles) {
   })
   return playerData
 }
+
+/**
+ * @param {Array[]} dataSet the data to analyze
+ * @param {string} country The country name
+ * @returns {object[]} The data with informations about the players
+ */
+export function getPlayersNames (dataSet, country) {
+  const playerData = []
+  dataSet.forEach((data) => {
+    if (data.Nationality === country) {
+      playerData.push(data)
+    }
+  })
+  return playerData
+}
