@@ -29,6 +29,7 @@ import d3Tip from 'd3-tip'
   const playTimePaths = helper.listOfPlayTimeCSVs()
   var filePaths = ['./ballondor.csv', './positions.csv'].concat(playTimePaths)
   var worldPath = ['./custom.geo.json']
+  var abdelPath = ['./world.json']
 
   /**
    * Visualization 1
@@ -165,47 +166,29 @@ import d3Tip from 'd3-tip'
    * Visualization 2
    *
    */
-  d3.csv('./ballondor.csv').then((data) => {
-    // TODO
-    // Probabily the csv will change, you can use Promise.all() for more than one csv
-    // const viz2Data = preprocess.function(data)
+  Promise.all(abdelPath.map(function (filePath) {
+    return d3.json(filePath)
+  })).then(function (abdel) {
+    // viz 1
 
-    // viz 3
-    // setSizing('#map-viz2')
-    // const g = helper.generateG(margin, 'viz2')
+    setSizing('#map-viz2')
+    const g = helper.generateG(margin, 'viz2')
 
-    // const tip = d3Tip().attr('class', 'd3-tip')
-    //   .html(function (d) {
-    //     return tooltip.getContentsViz3(d)
-    //   })
-    // g.call(tip)
-    // helper.appendAxes(g)
-    // helper.appendGraphLabels(g, 'Years', 'Number...')
-    // helper.placeTitle(g, graphSize.width)
+    const projection = d3.geoMercator()
+      .fitSize([graphSize.width, graphSize.height], abdel[0])
 
-    // viz.positionLabels(g, graphSize.width, graphSize.height)
+    // Create a path generator to convert GeoJSON objects to SVG paths
+    const pathGenerator = d3.geoPath().projection(projection)
 
-    // const colorScale = scales.setColorScaleViz2(viz2Data)
-    // const xScale = scales.setXScaleYears(graphSize.width, viz2Data)
-    // const yScale = scales.setYScaleViz2(graphSize.height, viz2Data)
-
-    // helper.drawXAxis(g, xScale, graphSize.height)
-    // helper.drawYAxis(g, yScale)
-
-    // legend.drawLegend(colorScale, g, graphSize.width)
-
-    // /**
-    //  * This function builds the graph.
-    //  *
-    //  * @param {*} variable The description...
-    //  */
-    // function build (...) {
-    //   // TODO
-    //   viz.function...(g, ...)
-    //   viz.setTitleText('#viz2', 'Vizualization 2')
-    // }
-    // build(...)
-    // viz.set???HoverHandler(tip)
+    // Draw the map using the GeoJSON file and the projection
+    g.selectAll('path')
+      .data(abdel[0].features)
+      .enter()
+      .append('path')
+      .attr('d', pathGenerator)
+  }).catch(function (error) {
+    // Handle any errors that may occur while loading the CSV files
+    console.error('Error loading CSV files (viz2):', error)
   })
 
   /**
