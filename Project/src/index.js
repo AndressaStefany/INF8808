@@ -69,6 +69,7 @@ import d3Tip from 'd3-tip'
     tooltip.style.border = '1px solid black'
     tooltip.style.padding = '0px'
     tooltip.style.display = 'none'
+    tooltip.style.borderRadius = '6px'
 
     // Add the div to the document body
     document.body.appendChild(tooltip)
