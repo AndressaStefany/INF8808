@@ -254,3 +254,50 @@ export function drawBar (data, id, xScale, yScale) {
     .attr('fill', 'steelblue')
     .style('opacity', 0.7)
 }
+
+/**
+ * Viz 2:
+ * Sets up the hover event handler. The tooltip should show on on hover.
+ *
+ * @param {*} tip The tooltip
+ */
+export function setLinesHoverHandler (tip) {
+  d3.selectAll('.line')
+    .on('mouseover', function (d, i) {
+      tip.show(d, this)
+    })
+    .on('mouseout', function (d, i) {
+      tip.hide()
+    })
+}
+
+/**
+ * Draws the circles on the graph.
+ *
+ * @param {object} data The data to bind to
+ * @param {*} player Player
+ * @param {*} colorScale The scale for the circles' color
+ * @param {*} tip Tooltip
+ */
+export function drawLines (data, player, colorScale, tip) {
+  const line = d3.line()
+    .x(function (d) { return d.x })
+    .y(function (d) { return d.y })
+
+  // Append the line to the graph
+  d3.select('#viz2')
+    .append('svg')
+    .append('path')
+    .datum(data)
+    .attr('class', 'line')
+    .attr('d', line)
+    .attr('fill', 'none')
+    .attr('stroke', colorScale)
+    .attr('stroke-width', 5)
+    .on('mouseover', function (d) {
+      tip.show(player, this)
+    })
+    .on('mouseout', function (d) {
+      tip.hide()
+    })
+}

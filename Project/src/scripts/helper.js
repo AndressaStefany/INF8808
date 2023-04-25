@@ -73,7 +73,7 @@ export function appendGraphLabels (g, labelX, labelY) {
     .enter()
     .append('tspan')
     .text((d) => d)
-    .attr('dy', (d, i) => i * 20)
+    .attr('dy', (d, i) => i !== 0 ? 20 : 0)
     .attr('x', -60)
 
   g.append('text')
