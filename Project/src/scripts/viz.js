@@ -98,3 +98,19 @@ export function setTitleText (id, text) {
     .selectAll('.title')
     .text(text)
 }
+
+/**
+ * Viz 3:
+ * Sets up the hover event handler. The tooltip should show on on hover.
+ *
+ * @param {*} tip The tooltip
+ */
+export function setLinesHoverHandler (tip) {
+  d3.selectAll('.line')
+    .on('mouseover', function (d, i) {
+      tip.show(d, this)
+    })
+    .on('mouseout', function (d, i) {
+      tip.hide()
+    })
+}
