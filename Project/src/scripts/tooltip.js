@@ -104,3 +104,17 @@ export function getContentsViz2 (d) {
 
   return 'Player: ' + playerName + '<br/>' + 'Years: ' + playerYears
 }
+
+/**
+ * Viz 1:
+ * Defines the contents of the tooltip.
+ *
+ * @param {object} d The 'd' parameter is an object representing a player
+ * @returns {string} The tooltip contents
+ */
+export function getContentsViz1 (d) {
+  const playerName = d.Player
+  const playerYears = d.Years.join(', ') // Assuming 'Years' is an array of years
+
+  return 'Player: ' + playerName + '<br/>' + 'Years: ' + playerYears
+}

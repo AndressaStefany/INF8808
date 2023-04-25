@@ -29,6 +29,35 @@ export function drawLegend (colorScale, g, width) {
  * @param {*} g The d3 Selection of the graph's g SVG element
  * @param {number} width The width of the graph, used to place the legend
  */
+export function drawLegendViz1 (colorScale, g, width) {
+  g.append('g').attr('id', 'legend').attr('transform', 'translate(' + (width) + ',0)')
+
+  // Get the domain values from the color scale
+  var newDomainValues = ['0', '1', '2-3', '4-5', '6-7']
+  colorScale.domain(newDomainValues)
+
+  // Create a legend scale with the domain values and a custom label function
+  var legend = d3Legend.legendColor()
+    .scale(colorScale)
+    .title('Number of winners')
+    .shape('path', d3.symbol().type(d3.symbolCircle).size(300)())
+    .shapeWidth(25)
+    .labels(function (d) {
+      return newDomainValues[d.i]
+    })
+
+  g.select('#legend').call(legend)
+
+  g.select('#legend').call(legend)
+}
+
+/**
+ * Draws the legend.
+ *
+ * @param {*} colorScale The color scale to use
+ * @param {*} g The d3 Selection of the graph's g SVG element
+ * @param {number} width The width of the graph, used to place the legend
+ */
 export function drawLegendViz2 (colorScale, g, width) {
   g.append('g').attr('id', 'legend').attr('transform', 'translate(' + (width) + ',0)')
 
