@@ -306,7 +306,10 @@ import d3Tip from 'd3-tip'
           currentYearViz3 = years[years.indexOf(currentYearViz3) - 1]
           xScale = scales.setXScaleYears(graphSize.width, viz3Data, currentYearViz3)
           helper.drawXAxis(g, xScale, graphSize.height)
+
           buildScatter(viz3Data, 1000, currentYearViz3, radiusScale, colorScale, xScale, yScale)
+          viz.setHoverHandlerViz3(tip)
+
           // Disable the back button
           if (currentYearViz3 === years[0]) {
             backButton.select('rect')
@@ -338,7 +341,10 @@ import d3Tip from 'd3-tip'
           currentYearViz3 = years[years.indexOf(currentYearViz3) + 1]
           xScale = scales.setXScaleYears(graphSize.width, viz3Data, currentYearViz3)
           helper.drawXAxis(g, xScale, graphSize.height)
+          
           buildScatter(viz3Data, 1000, currentYearViz3, radiusScale, colorScale, xScale, yScale)
+          viz.setHoverHandlerViz3(tip)
+
           // Disable the forward button
           if (currentYearViz3 === years[years.length - 1]) {
             forwardButton.select('rect')
@@ -468,7 +474,10 @@ import d3Tip from 'd3-tip'
           currentYearViz4 = years[years.indexOf(currentYearViz4) - 1]
           xScale = scales.setXScaleYears(graphSize.width - margin.right, viz4Data, currentYearViz4)
           helper.drawXAxis(g, xScale, graphSize.height)
+
           buildGrap1(viz4Data, 1000, currentYearViz4, xScale, yScale)
+          viz.setHoverHandlerViz4Bar(tip)
+
           // Disable the back button
           if (currentYearViz4 === years[0]) {
             backButton.select('rect')
@@ -500,7 +509,10 @@ import d3Tip from 'd3-tip'
           currentYearViz4 = years[years.indexOf(currentYearViz4) + 1]
           xScale = scales.setXScaleYears(graphSize.width - margin.right, viz4Data, currentYearViz4)
           helper.drawXAxis(g, xScale, graphSize.height)
+
           buildGrap1(viz4Data, 1000, currentYearViz4, xScale, yScale)
+          viz.setHoverHandlerViz4Bar(tip)
+          
           // Disable the forward button
           if (currentYearViz4 === years[years.length - 1]) {
             forwardButton.select('rect')
