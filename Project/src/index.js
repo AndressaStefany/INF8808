@@ -334,31 +334,31 @@ import d3Tip from 'd3-tip'
 
     var viz4Data = preprocess.getAges(mergedData)
 
-    // viz 4
+    // scatter plot and lines
     setSizing('#map-viz4')
-    const g = helper.generateG(margin, 'viz4')
+    const g1 = helper.generateGViz4(margin, 'viz4', '#graph1')
 
     const tip = d3Tip().attr('class', 'd3-tip')
       .html(function (d) {
         return tooltip.getContentsViz4(d)
       })
-    g.call(tip)
-    helper.appendAxes(g)
-    helper.appendGraphLabels(g, 'Years', 'Ages')
-    helper.placeTitle(g, graphSize.width)
+    g1.call(tip)
+    helper.appendAxes(g1)
+    helper.appendGraphLabels(g1, 'Years', 'Ages')
+    helper.placeTitle(g1, graphSize.width)
 
-    viz.positionLabels(g, graphSize.width, graphSize.height)
+    viz.positionLabels(g1, graphSize.width - margin.right, graphSize.height)
 
-    helper.drawButtons(g, graphSize.width, graphSize.height, '#ffffff')
+    helper.drawButtons(g1, graphSize.width - margin.right, graphSize.height, '#ffffff')
 
-    let xScale = scales.setXScaleYears(graphSize.width, viz4Data, currentYearViz4)
+    let xScale = scales.setXScaleYears(graphSize.width - margin.right, viz4Data, currentYearViz4)
     const yScale = scales.setYScaleViz4(graphSize.height, viz4Data)
 
-    helper.drawXAxis(g, xScale, graphSize.height)
-    helper.drawYAxis(g, yScale)
+    helper.drawXAxis(g1, xScale, graphSize.height)
+    helper.drawYAxis(g1, yScale)
 
     /**
-     * This function builds the graph.
+     * This function builds the graph 01.
      *
      * @param {object} data The data to be used
      * @param {number} transitionDuration The duration of the transition while placing the circles
@@ -366,18 +366,53 @@ import d3Tip from 'd3-tip'
      * @param {*} xScale The x scale for the graph
      * @param {*} yScale The y scale for the graph
      */
-    function build (data, transitionDuration, year, xScale, yScale) {
+    function buildGrap1 (data, transitionDuration, year, xScale, yScale) {
       const filteredData = data.filter(d => d.year > year && d.year <= year + 10)
-      viz.drawData(filteredData, '#viz4', xScale, yScale)
-      viz.moveCirclesViz4(g, xScale, yScale, transitionDuration)
-      viz.setTitleText('#viz4', 'Ages of winning players')
+      viz.drawData(filteredData, '#viz41', xScale, yScale)
+      viz.moveCirclesViz4(g1, xScale, yScale, transitionDuration)
+      viz.setTitleText('#viz41', 'Ages of winning players')
     }
     const transitionDuration = 0
-    build(viz4Data, transitionDuration, currentYearViz4, xScale, yScale)
+    buildGrap1(viz4Data, transitionDuration, currentYearViz4, xScale, yScale)
     viz.setHoverHandlerViz4(tip)
 
-    setClickHandlerBack(g)
-    setClickHandlerForward(g)
+    setClickHandlerBack(g1)
+    setClickHandlerForward(g1)
+
+    // bar graph
+    const ageCounts = preprocess.ageCounts(viz4Data)
+
+    const g2 = helper.generateGViz4(margin, 'viz4', '#graph2')
+
+    const tip2 = d3Tip().attr('class', 'd3-tip')
+      .html(function (d) {
+        return tooltip.getContentsViz4Bar(d)
+      })
+    g2.call(tip2)
+
+    helper.appendAxes(g2)
+    helper.appendGraphLabels(g2, 'Amount of players', 'Ages')
+
+    viz.positionLabels(g2, graphSize.width / 2, graphSize.height)
+
+    const xScaleBar = scales.setXScaleViz4Bar(graphSize.width / 2, ageCounts)
+    const yScaleBar = scales.setYScaleViz4Bar(graphSize.height, ageCounts)
+
+    helper.drawXAxis(g2, xScaleBar, graphSize.height)
+    helper.drawYAxisBar(g2, yScaleBar)
+
+    /**
+     * This function builds the graph 02.
+     *
+     * @param {object} data The age and number of ages
+     * @param {*} xScale The x scale for the graph
+     * @param {*} yScale The y scale for the graph
+     */
+    function buildGrap2 (data, xScale, yScale) {
+      viz.drawBar(data, '#viz42', xScale, yScale)
+    }
+    buildGrap2(ageCounts, xScaleBar, yScaleBar)
+    viz.setHoverHandlerViz4Bar(tip)
 
     /**
      *   Viz 4:
@@ -398,9 +433,9 @@ import d3Tip from 'd3-tip'
               .attr('fill', '#f4f6f4')
           }
           currentYearViz4 = years[years.indexOf(currentYearViz4) - 1]
-          xScale = scales.setXScaleYears(graphSize.width, viz4Data, currentYearViz4)
+          xScale = scales.setXScaleYears(graphSize.width - margin.right, viz4Data, currentYearViz4)
           helper.drawXAxis(g, xScale, graphSize.height)
-          build(viz4Data, 1000, currentYearViz4, xScale, yScale)
+          buildGrap1(viz4Data, 1000, currentYearViz4, xScale, yScale)
           // Disable the back button
           if (currentYearViz4 === years[0]) {
             backButton.select('rect')
@@ -430,9 +465,9 @@ import d3Tip from 'd3-tip'
               .attr('fill', '#f4f6f4')
           }
           currentYearViz4 = years[years.indexOf(currentYearViz4) + 1]
-          xScale = scales.setXScaleYears(graphSize.width, viz4Data, currentYearViz4)
+          xScale = scales.setXScaleYears(graphSize.width - margin.right, viz4Data, currentYearViz4)
           helper.drawXAxis(g, xScale, graphSize.height)
-          build(viz4Data, 1000, currentYearViz4, xScale, yScale)
+          buildGrap1(viz4Data, 1000, currentYearViz4, xScale, yScale)
           // Disable the forward button
           if (currentYearViz4 === years[years.length - 1]) {
             forwardButton.select('rect')

@@ -46,17 +46,12 @@ button:hover, button:active {
 	background-color:#f6f6f6;
 }
 
-/* .viz-container{
-    height: 100%;
-} */
-
 .graph {
     width: 100%;
     height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    /* padding: 30px 50px 0px 50px; */
 }
 
 #panel .theme {
@@ -98,4 +93,12 @@ path {
 
 .main-svg {
     margin-top: 30px;
+}
+
+#graph1 {
+    width: 45%;
+}
+
+#graph2 {
+    width: 30%;
 }

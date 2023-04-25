@@ -14,6 +14,22 @@ export function generateG (margin, id) {
       'translate(' + margin.left + ',' + margin.top + ')')
 }
 /**
+ * Generates the SVG element g which will contain the data visualisation.
+ *
+ * @param {object} margin The desired margins around the graph
+ * @param {string} id The id of the graph
+ * @param {string} graphId The id of the svg
+ * @returns {*} The d3 Selection for the created g element
+ */
+export function generateGViz4 (margin, id, graphId) {
+  return d3.select('#map-' + id)
+    .select(graphId)
+    .append('g')
+    .attr('id', id + graphId[graphId.length - 1])
+    .attr('transform',
+      'translate(' + margin.left + ',' + margin.top + ')')
+}
+/**
  * Sets the size of the SVG canvas containing the graph.
  *
  * @param {string} id The desired width
@@ -124,6 +140,18 @@ export function drawYAxis (g, yScale) {
 }
 
 /**
+ * Viz 4 - Bar:
+ * Draws the Y axis to the left of the diagram.
+ *
+ * @param {*} g The d3 Selection of the graph's g SVG element
+ * @param {*} yScale The scale to use to draw the axis
+ */
+export function drawYAxisBar (g, yScale) {
+  g.select('.y.axis')
+    .call(d3.axisLeft(yScale).tickSizeOuter(0).tickArguments([16, '.0r']))
+}
+
+/**
  * Draws the button to toggle the display year.
  *
  * @param {*} g The d3 Selection of the graph's g SVG element
@@ -132,7 +160,6 @@ export function drawYAxis (g, yScale) {
  * @param {string} color The color of the button disable
  */
 export function drawButtons (g, width, height, color) {
-  // talvez seja append button, e nao g
   const backButton = g.append('g')
     .attr('class', 'button back')
     .attr('transform', 'translate(' + (width / 2 - 100) + ',' + (height + 20) + ')')

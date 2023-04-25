@@ -1,4 +1,4 @@
-import { getContentsViz3, getContentsViz4 } from './tooltip'
+import { getContentsViz3, getContentsViz4, getContentsViz4Bar } from './tooltip'
 
 /**
  * Viz 3:
@@ -69,7 +69,7 @@ export function setHoverHandlerViz3 (tip) {
 }
 
 /**
- * Viz 4:
+ * Viz 4 - scatter:
  * Sets up the hover event handler. The tooltip should show on on hover.
  *
  * @param {*} tip The tooltip
@@ -92,6 +92,34 @@ export function setHoverHandlerViz4 (tip) {
   })
 
   circles.on('mouseout', (event) => {
+    d3.select(event.currentTarget).style('opacity', 0.7)
+    tip.hide()
+  })
+}
+
+/**
+ * Viz 4 - bar:
+ * Sets up the hover event handler. The tooltip should show on on hover.
+ *
+ * @param {*} tip The tooltip
+ */
+export function setHoverHandlerViz4Bar (tip) {
+  const rects = d3.select('#bars').selectAll('rect')
+
+  rects.on('mouseover', (event, data) => {
+    const content = getContentsViz4Bar(data)
+
+    d3.select(event.currentTarget).style('opacity', 1)
+    tip.offsetX = event.offsetX
+    tip.offsetY = event.offsetY
+    tip.html(content)
+    tip.style('left', event.pageX + 'px')
+      .style('top', event.pageY + 'px')
+      .style('font-weight', 300)
+      .show(data, event.currentTarget)
+  })
+
+  rects.on('mouseout', (event) => {
     d3.select(event.currentTarget).style('opacity', 0.7)
     tip.hide()
   })
@@ -129,7 +157,7 @@ export function setTitleText (id, text) {
 }
 
 /**
- * Viz 4:
+ * Viz 4 - scatter:
  * Draws the circles on the graph.
  *
  * @param {object} data The data to bind to
@@ -149,7 +177,7 @@ export function drawData (data, id, xScale, yScale) {
     .join('circle')
     .attr('r', 5)
     .attr('fill', 'steelblue')
-    .style('opacity', 1)
+    .style('opacity', 0.7)
 
   // draw the lines
   const lines = d3.line()
@@ -168,10 +196,11 @@ export function drawData (data, id, xScale, yScale) {
     .attr('fill', 'none')
     .attr('stroke', 'steelblue')
     .attr('stroke-width', 2)
+    .style('opacity', 0.5)
 }
 
 /**
- * Viz 4:
+ * Viz 4 - scatter:
  * Updates the position of the circles based on their bound data. The position
  * transitions gradually.
  *
@@ -196,4 +225,32 @@ export function moveCirclesViz4 (g, xScale, yScale, transitionDuration) {
       .y(d => yScale(d.age))
       .curve(d3.curveLinear)
     )
+}
+
+/**
+ * Viz 4 - Bar:
+ * Draws the circles on the graph.
+ *
+ * @param {object} data The data {age, count}
+ * @param {string} id The id of the graph
+ * @param {*} xScale The x scale used to position the circles
+ * @param {*} yScale The y scale used to position the circles
+ */
+export function drawBar (data, id, xScale, yScale) {
+  const countArray = data.map((d) => d.count)
+  const ageArray = data.map((d) => d.age)
+
+  // create a new SVG group for the bars
+  d3.select(id).append('g').attr('id', 'bars')
+
+  d3.select('#bars')
+    .selectAll('rect')
+    .data(countArray)
+    .join('rect')
+    .attr('x', xScale(0))
+    .attr('y', (d, i) => yScale(ageArray[i]))
+    .attr('width', d => xScale(d) - xScale(0))
+    .attr('height', yScale.bandwidth())
+    .attr('fill', 'steelblue')
+    .style('opacity', 0.7)
 }

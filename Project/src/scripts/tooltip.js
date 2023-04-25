@@ -63,3 +63,30 @@ export function getContentsViz4 (d) {
 
   return createContent(data)
 }
+
+/**
+ * Viz 4 - Bar:
+ * Defines the contents of the tooltip.
+ *
+ * @param {object} d The data associated to the hovered element
+ * @returns {string} The tooltip contents
+ */
+export function getContentsViz4Bar (d) {
+  const createDataItem = (value) => ({ value })
+  const data = [
+    createDataItem(`${d} ${d === 1 ? 'player' : 'players'}`)
+  ]
+
+  const createContent = (data) => {
+    const container = d3.create('div')
+    data.forEach(({ value }) => {
+      const itemContainer = container.append('div')
+      itemContainer.append('span')
+        .attr('class', 'tooltip-value')
+        .text(value)
+    })
+    return container.html()
+  }
+
+  return createContent(data)
+}

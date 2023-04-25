@@ -63,3 +63,24 @@ export function getAges (data) {
   }))
   return playersWithAge
 }
+
+/**
+ * @param {object[]} data The data
+ * @returns {object[]} The data with the age counts
+ */
+export function ageCounts (data) {
+  const ages = data.map(player => player.age)
+
+  const ageCounts = d3.rollup(
+    ages,
+    v => v.length,
+    d => d
+  )
+
+  // Create list of objects { age, count } sorted by age
+  const sortedAgeCounts = Array.from(ageCounts.entries())
+    .sort((a, b) => a[0] - b[0])
+    .map(([age, count]) => ({ age, count }))
+
+  return sortedAgeCounts
+}

@@ -57,7 +57,7 @@ export function setXScaleYears (width, data, startYear) {
 
 /**
  * Viz 3:
- * Defines the log scale used to position the center of the circles in Y.
+ * Defines the linear scale used to position the center of the circles in Y.
  *
  * @param {number} height The height of the graph
  * @param {object} data The data to be used
@@ -74,8 +74,8 @@ export function setYScaleViz3 (height, data) {
 }
 
 /**
- * Viz 4:
- * Defines the log scale used to position in Y.
+ * Viz 4 - scatter:
+ * Defines the linear scale used to position in Y.
  *
  * @param {number} height The height of the graph
  * @param {object} data The data to be used
@@ -89,4 +89,38 @@ export function setYScaleViz4 (height, data) {
     .range([height, 0])
 
   return agesScale
+}
+
+/**
+ * Viz 4 - bar:
+ * Defines the linear scale used to position the rects.
+ *
+ * @param {number} width The width of the graph
+ * @param {object} data The data to be used
+ * @returns {*} The linear scale in X
+ */
+export function setXScaleViz4Bar (width, data) {
+  const counts = data.map((d) => d.count)
+
+  return d3.scaleLinear()
+    .domain([0, d3.max(counts)])
+    .range([0, width])
+}
+
+/**
+ * Viz 4 - bar:
+ * Defines the linear scale used to position in Y.
+ *
+ * @param {number} height The height of the graph
+ * @param {object} data The data to be used
+ * @returns {*} The linear scale in Y
+ */
+export function setYScaleViz4Bar (height, data) {
+  const ages = data.map((d) => d.age)
+  const ageDomain = Array.from({ length: d3.max(ages) - d3.min(ages) + 1 }, (_, i) => i + d3.min(ages))
+
+  return d3.scaleBand()
+    .domain(ageDomain)
+    .range([height, 0])
+    .padding(0.1)
 }
