@@ -58,17 +58,22 @@ import d3Tip from 'd3-tip'
     // Create a new div element
     const tooltip = document.createElement('div')
 
+    helper.placeTitle(g, graphSize.width)
+    viz.setTitleText('#viz1', "Nationality of Ballon d'or winners")
+
     // Add some content to the div
 
     // Set the CSS styles for the div
     tooltip.style.position = 'absolute'
     tooltip.style.background = 'white'
     tooltip.style.border = '1px solid black'
-    tooltip.style.padding = '10px'
+    tooltip.style.padding = '0px'
     tooltip.style.display = 'none'
+    tooltip.style.borderRadius = '6px'
 
     // Add the div to the document body
     document.body.appendChild(tooltip)
+    
     // Add a click event listener to the document body
 
     d3.csv('./country.csv').then(function (data) {
@@ -101,20 +106,19 @@ import d3Tip from 'd3-tip'
             const players = preprocess.getPlayersNames(data2, i.properties.admin)
             if (players.length !== 0) {
               tooltip.innerHTML = `
-            <div style="color: #FFF; background-color: #000; padding: 10px; border-radius: 5px;">
+            <div style="color: #FFF; background-color: #5e4c4f; padding: 10px; border-radius: 5px;">
               <h3 style="margin-top: 0;">${i.properties.admin}</h3>
               <ul style="list-style: none; margin: 0; padding: 0;">
                 ${players.map(player => `
                   <li style="padding: 5px 0;">
-                    <span style="color: #E60073; font-weight: bold;">${player.year}: </span>
+                    <span style="color: #7ff3b8; font-weight: bold;">${player.year}: </span>
                     <span style="color: #FFF;">${player.player}</span>
-                    <span style="color: #E60073; font-style: italic;">(${player.club}, ${player.Nationality})</span>
+                    <span style="color: #7ff3b8; font-style: italic;">(${player.club}, ${player.Nationality})</span>
                   </li>
                 `).join('')}
               </ul>
             </div>
-          `       
-          
+          `   
               const closeButton = document.createElement('div')
               closeButton.innerHTML = '&#10005;' // X symbol
               closeButton.style.position = 'absolute'
@@ -140,6 +144,7 @@ import d3Tip from 'd3-tip'
           .on('mouseout', function (d) {
 
           })
+        legend.drawLegendViz1(colorScale, g, graphSize.width)
       })
     })
   }).catch(function (error) {
