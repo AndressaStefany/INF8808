@@ -161,45 +161,52 @@ import d3Tip from 'd3-tip'
   // build(...)
   // viz.set???HoverHandler(tip)
 
-/**
- * Visualization 2
- *
- */
+  /**
+   * Visualization 2
+   *
+   */
   Promise.all(filePaths.map(function (filePath) {
-    return d3.csv(filePath); // to review the paths
+    return d3.csv(filePath)
   })).then(function (dataArray) {
-    // Extract the loaded data from ballonDorData
-    const ballonDorData = preprocess.summarizeBallonDor(dataArray[0]);
-    console.log(ballonDorData);
+    const ballonDorData = preprocess.summarizeBallonDor(dataArray[0])
+    console.log(ballonDorData)
 
-    // viz 4
-    setSizing('#map-viz2');
-    const g = helper.generateG(margin, 'viz2');
+    setSizing('#map-viz2')
+    const g = helper.generateG(margin, 'viz2')
 
     const tip = d3Tip().attr('class', 'd3-tip')
       .html(function (d) {
-        return tooltip.getContentsViz2(d);
-      });
-    g.call(tip);
-    helper.appendAxes(g);
-    helper.appendGraphLabels(g, 'Years', "Ballon d'or won");
-    helper.placeTitle(g, graphSize.width);
+        return tooltip.getContentsViz2(d)
+      })
+    g.call(tip)
+    helper.appendAxes(g)
+    helper.appendGraphLabels(g, 'Years', "Ballon d'or won")
+    helper.placeTitle(g, graphSize.width)
 
-    viz.positionLabels(g, graphSize.width, graphSize.height);
+    viz.positionLabels(g, graphSize.width, graphSize.height)
 
-    // just an example using the data of viz 2
-    const xScale = scales.setXScaleYears(graphSize.width, ballonDorData);
-    const yScale = scales.setYScaleViz2(graphSize.height, ballonDorData);
+    const xScale = scales.setXScaleYears(graphSize.width, ballonDorData)
+    const yScale = scales.setYScaleViz2(graphSize.height, ballonDorData)
 
-    helper.drawXAxis(g, xScale, graphSize.height);
-    helper.drawYAxis(g, yScale);
+    helper.drawXAxis(g, xScale, graphSize.height)
+    helper.drawYAxis(g, yScale)
+    var colors = ['steelblue', 'green', 'red', 'purple', 'orange', 'magenta', 'teal', 'cyan', 'maroon', 'navy'];
+    var colorScale = d3.scaleOrdinal()
+      .range(colors)
 
-    viz.setTitleText('#viz2', "Multiple Ballon d'or winners");
+    viz.setTitleText('#viz2', "Multiple Ballon d'or winners")
 
+    /**
+     * This function builds the graph.
+     *
+     * @param {object} data The data to be used
+     * @param {*} colorScale The scale for the circles' color
+     * @param {*} xScale The x scale for the graph
+     * @param {*} yScale The y scale for the graph
+     */
     function buildScatter (data, colorScale, xScale, yScale) {
       data.forEach(function (player) {
         const playerYears = player.Years
-
         const lineData = []
 
         var position = 1
@@ -210,37 +217,16 @@ import d3Tip from 'd3-tip'
           position++
         })
 
-        console.log(lineData);
-        // Draw the line with curve option
-        const line = d3.line()
-          .x(function (d) { return d.x })
-          .y(function (d) { return d.y });
-        // Append the line to the graph
-        d3.select('#viz2')
-          .append('svg')
-          .append('path')
-          .datum(lineData)
-          .attr('class', 'line')
-          .attr('d', line)
-          .attr('fill', 'none')
-          .attr('stroke', colorScale)
-          .attr('stroke-width', 5)
-          .on('mouseover', function (d) {
-            tip.show(player, this)
-          })
-          .on('mouseout', function (d) {
-            tip.hide()
-          })
+        viz.drawLines(lineData, player, colorScale, tip)
       })
     }
-    var colors = ['steelblue', 'green', 'red', 'purple', 'orange', 'magenta', 'teal'];
-    var colorScale = d3.scaleOrdinal()
-      .range(colors);
-    buildScatter(ballonDorData, colorScale, xScale, yScale);
+
+    buildScatter(ballonDorData, colorScale, xScale, yScale)
+    legend.drawLegendViz2(colorScale, g, graphSize.width)
   }).catch(function (error) {
     // Handle any errors that may occur while loading the CSV files
-    console.error('Error loading CSV files (viz2):', error);
-  });
+    console.error('Error loading CSV files (viz2):', error)
+  })
 
   /**
    * Visualization 3

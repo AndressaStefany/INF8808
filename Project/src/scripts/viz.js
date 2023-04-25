@@ -114,3 +114,34 @@ export function setLinesHoverHandler (tip) {
       tip.hide()
     })
 }
+
+/**
+ * Draws the circles on the graph.
+ * @param {object} data The data to bind to
+ * @param {string} id The id of the graph
+ * @param {*} rScale The scale for the circles' radius
+ * @param {*} player Player
+ * @param {*} colorScale The scale for the circles' color
+ * @param {*} tip Tooltip
+ */
+export function drawLines (data, player, colorScale, tip) {
+  const line = d3.line()
+    .x(function (d) { return d.x })
+    .y(function (d) { return d.y });
+  // Append the line to the graph
+  d3.select('#viz2')
+    .append('svg')
+    .append('path')
+    .datum(data)
+    .attr('class', 'line')
+    .attr('d', line)
+    .attr('fill', 'none')
+    .attr('stroke', colorScale)
+    .attr('stroke-width', 5)
+    .on('mouseover', function (d) {
+      tip.show(player, this)
+    })
+    .on('mouseout', function (d) {
+      tip.hide()
+    })
+}
