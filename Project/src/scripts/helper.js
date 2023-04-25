@@ -267,7 +267,10 @@ export function listOfPlayTimeCSVs () {
     './PlayTime/Sandro-MazzolaPlayTime.csv',
     './PlayTime/Steven-GerrardPlayTime.csv',
     './PlayTime/Thierry-HenryPlayTime.csv',
-    './PlayTime/Zinedine-ZidanePlayTime.csv'
+    './PlayTime/Zinedine-ZidanePlayTime.csv',
+    './PlayTime/Oleg-BlokhinPlayTime.csv',
+    './PlayTime/Alfredo-Di-StefanoPlayTime.csv',
+    './PlayTime/Stanley-MatthewsPlayTime.csv'
   ]
   return csvFiles
 }

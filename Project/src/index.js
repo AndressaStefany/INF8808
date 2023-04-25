@@ -26,7 +26,7 @@ import d3Tip from 'd3-tip'
 
   let currentYearViz3 = 2012
   let currentYearViz4 = 2012
-  const years = [1956, 1960, 1970, 1980, 1990, 2000, 2010, 2012]
+  const years = [1955, 1960, 1970, 1980, 1990, 2000, 2010, 2012]
 
   let svgSize, graphSize
   // Define an array of file paths for the CSV files
@@ -229,7 +229,7 @@ import d3Tip from 'd3-tip'
     // Extract the loaded data from Playing Time files
     // and get the minutes and games of players
     const PlayingTimeArrays = dataArray.slice(2)
-    var minutesAndGames = preprocess.getMinutesGames(playTimePaths, PlayingTimeArrays)
+    const minutesAndGames = preprocess.getMinutesGames(playTimePaths, PlayingTimeArrays)
 
     var viz3Data = preprocess.mergeDataByKeys(mergedData, minutesAndGames, 'codePlayer', 'codePlayer')
 
@@ -364,7 +364,6 @@ import d3Tip from 'd3-tip'
     const ballonDorData = dataArray[0]
     const positionsData = dataArray[1]
     var mergedData = preprocess.mergeDataByKeys(ballonDorData, positionsData, 'player', 'player')
-    mergedData = preprocess.addCodePlayerColumn(mergedData, 'codePlayer')
 
     var viz4Data = preprocess.getAges(mergedData)
 

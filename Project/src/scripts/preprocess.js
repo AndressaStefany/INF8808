@@ -22,7 +22,7 @@ export function mergeDataByKeys (dataA, dataB, keyA, keyB) {
  */
 export function addCodePlayerColumn (data, colName) {
   data.forEach(item => {
-    item[colName] = item.player.replace(/\s+/g, '-')
+    item[colName] = item.player.replace(/ /g, '-').normalize('NFD').replace(/[\u0300-\u036f]/g, '')
   })
   return data
 }
