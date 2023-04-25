@@ -42,11 +42,8 @@ import d3Tip from 'd3-tip'
     return d3.json(filePath)
   })).then(function (world) {
     // viz 1
-
     setSizing('#map-viz1')
     const g = helper.generateG(margin, 'viz1')
-
-    // Load the GeoJSON file of the world's borders
 
     // Create a projection to transform latitude and longitude coordinates to pixel coordinates
     const projection = d3.geoMercator()
@@ -62,7 +59,6 @@ import d3Tip from 'd3-tip'
     viz.setTitleText('#viz1', "Nationality of Ballon d'or winners")
 
     // Add some content to the div
-
     // Set the CSS styles for the div
     tooltip.style.position = 'absolute'
     tooltip.style.background = 'white'
@@ -73,19 +69,14 @@ import d3Tip from 'd3-tip'
 
     // Add the div to the document body
     document.body.appendChild(tooltip)
-    
-    // Add a click event listener to the document body
 
     d3.csv('./country.csv').then(function (data) {
       d3.csv('./ballondor.csv').then(function (data2) {
-      // data is an array of objects, where each object represents a country and its corresponding point value
-
         // Define a color scale
         const colorScale = d3.scaleSequential()
           .interpolator(d3.interpolateBlues) // Define the range of colors to interpolate between
           .domain([1, 7]) // Define the domain of values to map to the range of colors
 
-        // update the color of each path element based on its corresponding data point
         g.selectAll('path')
           .data(world[0].features)
           .enter()
@@ -99,7 +90,7 @@ import d3Tip from 'd3-tip'
             if (countryData) {
               return colorScale(+countryData.points)
             } else {
-              return 'white' // or whatever default color you want to use
+              return 'white'
             }
           })
           .on('click', function (d, i) {
@@ -120,7 +111,7 @@ import d3Tip from 'd3-tip'
             </div>
           `   
               const closeButton = document.createElement('div')
-              closeButton.innerHTML = '&#10005;' // X symbol
+              closeButton.innerHTML = '&#10005;'
               closeButton.style.position = 'absolute'
               closeButton.style.top = '1px'
               closeButton.style.right = '11px'
