@@ -155,7 +155,6 @@ import d3Tip from 'd3-tip'
     return d3.csv(filePath)
   })).then(function (dataArray) {
     const ballonDorData = preprocess.summarizeBallonDor(dataArray[0])
-    console.log(ballonDorData)
 
     setSizing('#map-viz2')
     const g = helper.generateG(margin, 'viz2')
@@ -190,7 +189,7 @@ import d3Tip from 'd3-tip'
      * @param {*} xScale The x scale for the graph
      * @param {*} yScale The y scale for the graph
      */
-    function buildScatter (data, colorScale, xScale, yScale) {
+    function build (data, colorScale, xScale, yScale) {
       data.forEach(function (player) {
         const playerYears = player.Years
         const lineData = []
@@ -207,7 +206,7 @@ import d3Tip from 'd3-tip'
       })
     }
 
-    buildScatter(ballonDorData, colorScale, xScale, yScale)
+    build(ballonDorData, colorScale, xScale, yScale)
     legend.drawLegendViz2(colorScale, g, graphSize.width)
   }).catch(function (error) {
     // Handle any errors that may occur while loading the CSV files
