@@ -29,7 +29,6 @@ import d3Tip from 'd3-tip'
   const playTimePaths = helper.listOfPlayTimeCSVs()
   var filePaths = ['./ballondor.csv', './positions.csv'].concat(playTimePaths)
   var worldPath = ['./custom.geo.json']
-  var abdelPath = ['./world.json']
 
   /**
    * Visualization 1
@@ -166,26 +165,73 @@ import d3Tip from 'd3-tip'
    * Visualization 2
    *
    */
-  Promise.all(abdelPath.map(function (filePath) {
-    return d3.json(filePath)
-  })).then(function (abdel) {
-    // viz 1
+  Promise.all(filePaths.map(function (filePath) {
+    return d3.csv(filePath) // to review the paths
+  })).then(function (dataArray) {
+    // Extract the loaded data from ballonDorData
+    const ballonDorData = preprocess.summarizeBallonDor(dataArray[0])
+    console.log(ballonDorData)
 
+    // viz 4
     setSizing('#map-viz2')
     const g = helper.generateG(margin, 'viz2')
 
-    const projection = d3.geoMercator()
-      .fitSize([graphSize.width, graphSize.height], abdel[0])
+    // const tip = d3Tip().attr('class', 'd3-tip')
+    //   .html(function (d) {
+    //     return tooltip.getContentsViz3(d)
+    //   })
+    // g.call(tip)
+    helper.appendAxes(g)
+    helper.appendGraphLabels(g, 'Years', "Ballon d'or won")
+    helper.placeTitle(g, graphSize.width)
 
-    // Create a path generator to convert GeoJSON objects to SVG paths
-    const pathGenerator = d3.geoPath().projection(projection)
+    viz.positionLabels(g, graphSize.width, graphSize.height)
 
-    // Draw the map using the GeoJSON file and the projection
-    g.selectAll('path')
-      .data(abdel[0].features)
-      .enter()
-      .append('path')
-      .attr('d', pathGenerator)
+    // just an example using the data of viz 2
+    const xScale = scales.setXScaleYears(graphSize.width, ballonDorData)
+    const yScale = scales.setYScaleViz2(graphSize.height, ballonDorData)
+
+    helper.drawXAxis(g, xScale, graphSize.height)
+    helper.drawYAxis(g, yScale)
+
+    viz.setTitleText('#viz2', "Multiple Ballon d'or winners")
+    
+    function buildScatter (data, colorScale, xScale, yScale) {
+      data.forEach(function (player) {
+        const playerYears = player.Years
+    
+        const lineData = []
+    
+        var position = 1
+        playerYears.forEach(function (year) {
+          const x = xScale(parseInt(year))
+          const y = yScale(position)
+          lineData.push({ x: x, y: y })
+          position++
+        })
+        
+        console.log(lineData)
+        // Draw the line with curve option
+        const line = d3.line()
+          .x(function (d) { return d.x })
+          .y(function (d) { return d.y })
+        // Append the line to the graph
+        d3.select('#viz2')
+          .append('svg')
+          .append('path')
+          .datum(lineData)
+          .attr('class', 'line')
+          .attr('d', line)
+          .attr('fill', 'none')
+          .attr('stroke', colorScale)
+          .attr('stroke-width', 5)
+      })
+    }
+    var colors = ['steelblue', 'green', 'red', 'purple', 'orange', 'magenta', 'teal']
+    var colorScale = d3.scaleOrdinal()
+      .range(colors)
+    buildScatter(ballonDorData, colorScale, xScale, yScale)
+    // viz.setHoverHandler(tip)
   }).catch(function (error) {
     // Handle any errors that may occur while loading the CSV files
     console.error('Error loading CSV files (viz2):', error)

@@ -44,10 +44,8 @@ export function setRadiusScale (data) {
  * @returns {*} The linear scale in X
  */
 export function setXScaleYears (width, data) {
-  const years = data.map((d) => d.year)
-
   const yearsScale = d3.scaleLinear()
-    .domain([d3.min(years), d3.max(years)])
+    .domain([1957, 2022])
     .range([0, width])
 
   return yearsScale
@@ -84,6 +82,24 @@ export function setYScaleViz4 (height, data) {
 
   const agesScale = d3.scaleLinear()
     .domain([0, 25])
+    .range([height, 0])
+
+  return agesScale
+}
+
+/**
+ * Viz 4:
+ * Defines the log scale used to position in Y.
+ *
+ * @param {number} height The height of the graph
+ * @param {object} data The data to be used
+ * @returns {*} The linear scale in Y
+ */
+export function setYScaleViz2 (height, data) {
+  // const ages = data.map((d) => d.ages)
+
+  const agesScale = d3.scaleLinear()
+    .domain([0, 10])
     .range([height, 0])
 
   return agesScale
