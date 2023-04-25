@@ -110,11 +110,8 @@ export function getPlayersNames (dataSet, country) {
  *  { Player : ___, Years: ___ }, ...
  * ]
  *
- * The number of the act (starting at 1) follows the 'Act' key. The name of the player follows the
- * 'Player' key. The number of lines that player has in that act follows the 'Count' key.
- *
  * @param {object[]} data The dataset
- * @returns {object[]} The nested data set grouping the line count by player and by act
+ * @returns {object[]} The nested data set grouping the line count by player and by years
  */
 export function summarizeBallonDor (data) {
   const players = []
