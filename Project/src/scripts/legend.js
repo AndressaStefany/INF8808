@@ -29,7 +29,7 @@ export function drawLegend (colorScale, g, width) {
  * @param {*} g The d3 Selection of the graph's g SVG element
  * @param {number} width The width of the graph, used to place the legend
  */
-export function drawLegendViz2(colorScale, g, width) {
+export function drawLegendViz2 (colorScale, g, width) {
   g.append('g').attr('id', 'legend').attr('transform', 'translate(' + (width) + ',0)')
 
   // Get the domain values from the color scale
