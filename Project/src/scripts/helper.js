@@ -89,7 +89,7 @@ export function placeTitleViz4 (g) {
   g.append('text')
     .attr('class', 'title')
     .attr('x', 0)
-    .attr('y', 0) // more high +, mora for go down in the page
+    .attr('y', 0)
     .attr('font-size', 14)
 }
 
@@ -129,8 +129,9 @@ export function drawYAxis (g, yScale) {
  * @param {*} g The d3 Selection of the graph's g SVG element
  * @param {number} width The width of the graph, used to place the button
  * @param {number} height The height of the graph
+ * @param {string} color The color of the button disable
  */
-export function drawButtons (g, width, height) {
+export function drawButtons (g, width, height, color) {
   // talvez seja append button, e nao g
   const backButton = g.append('g')
     .attr('class', 'button back')
@@ -168,7 +169,7 @@ export function drawButtons (g, width, height) {
   forwardButton.append('rect')
     .attr('width', 70)
     .attr('height', 30)
-    .attr('fill', '#d3d9d2')
+    .attr('fill', color)
     .attr('pointer-events', 'none')
     .on('mouseenter', function () {
       d3.select(this).attr('stroke', '#362023')

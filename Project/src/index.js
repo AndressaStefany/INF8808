@@ -215,7 +215,7 @@ import d3Tip from 'd3-tip'
 
     viz.positionLabels(g, graphSize.width, graphSize.height)
 
-    helper.drawButtons(g, graphSize.width, graphSize.height)
+    helper.drawButtons(g, graphSize.width, graphSize.height, '#d3d9d2')
 
     const radiusScale = scales.setRadiusScale(viz3Data)
     const colorScale = scales.setColorScale(viz3Data)
@@ -228,7 +228,7 @@ import d3Tip from 'd3-tip'
     legend.drawLegend(colorScale, g, graphSize.width)
 
     buildScatter(viz3Data, 0, currentYearViz3, radiusScale, colorScale, xScale, yScale)
-    viz.setCircleHoverHandler(tip)
+    viz.setHoverHandlerViz3(tip)
 
     setClickHandlerBack(g)
     setClickHandlerForward(g)
@@ -247,11 +247,12 @@ import d3Tip from 'd3-tip'
     function buildScatter (data, transitionDuration, year, rScale, colorScale, xScale, yScale) {
       const filteredData = data.filter(d => d.year > year && d.year <= year + 10)
       viz.drawCircles(filteredData, '#viz3', rScale, colorScale, xScale, yScale)
-      viz.moveCircles(g, xScale, yScale, transitionDuration)
+      viz.moveCirclesViz3(g, xScale, yScale, transitionDuration)
       viz.setTitleText('#viz3', 'Relationship between winners, minutes and games played')
     }
 
     /**
+     *   Viz 3:
      *   Sets up the click handler for the button
      *
      *   @param {*} g The d3 Selection of the graph's g SVG element
@@ -283,6 +284,7 @@ import d3Tip from 'd3-tip'
     }
 
     /**
+     *   Viz 3:
      *   Sets up the click handler for the button
      *
      *   @param {*} g The d3 Selection of the graph's g SVG element
@@ -336,19 +338,20 @@ import d3Tip from 'd3-tip'
     setSizing('#map-viz4')
     const g = helper.generateG(margin, 'viz4')
 
-    // const tip = d3Tip().attr('class', 'd3-tip')
-    //   .html(function (d) {
-    //     return tooltip.getContentsViz3(d)
-    //   })
-    // g.call(tip)
+    const tip = d3Tip().attr('class', 'd3-tip')
+      .html(function (d) {
+        return tooltip.getContentsViz4(d)
+      })
+    g.call(tip)
     helper.appendAxes(g)
     helper.appendGraphLabels(g, 'Years', 'Ages')
     helper.placeTitle(g, graphSize.width)
 
     viz.positionLabels(g, graphSize.width, graphSize.height)
 
-    // just an example using the data of viz 4
-    const xScale = scales.setXScaleYears(graphSize.width, viz4Data)
+    helper.drawButtons(g, graphSize.width, graphSize.height, '#ffffff')
+
+    let xScale = scales.setXScaleYears(graphSize.width, viz4Data, currentYearViz4)
     const yScale = scales.setYScaleViz4(graphSize.height, viz4Data)
 
     helper.drawXAxis(g, xScale, graphSize.height)
@@ -359,19 +362,86 @@ import d3Tip from 'd3-tip'
      *
      * @param {object} data The data to be used
      * @param {number} transitionDuration The duration of the transition while placing the circles
-     * @param {Array[]} years The year to be displayed
+     * @param {Array[]} year The year to be displayed
      * @param {*} xScale The x scale for the graph
      * @param {*} yScale The y scale for the graph
      */
-    function buildScatter (data, transitionDuration, years, xScale, yScale) {
-      // viz.drawData(data, '#viz4', rScale, colorScale, xScale, yScale)
-      // viz.moveCircles(g, xScale, yScale, transitionDuration)
+    function build (data, transitionDuration, year, xScale, yScale) {
+      const filteredData = data.filter(d => d.year > year && d.year <= year + 10)
+      viz.drawData(filteredData, '#viz4', xScale, yScale)
+      viz.moveCirclesViz4(g, xScale, yScale, transitionDuration)
       viz.setTitleText('#viz4', 'Ages of winning players')
     }
-    // change it
     const transitionDuration = 0
-    buildScatter(viz4Data, transitionDuration, currentYearViz4, xScale, yScale)
-    // viz.setHoverHandler(tip)
+    build(viz4Data, transitionDuration, currentYearViz4, xScale, yScale)
+    viz.setHoverHandlerViz4(tip)
+
+    setClickHandlerBack(g)
+    setClickHandlerForward(g)
+
+    /**
+     *   Viz 4:
+     *   Sets up the click handler for the button
+     *
+     *   @param {*} g The d3 Selection of the graph's g SVG element
+     */
+    function setClickHandlerBack (g) {
+      const backButton = g.select('.button.back')
+
+      backButton
+        .on('click', () => {
+          // Activate the forward button
+          if (currentYearViz4 === years[years.length - 1]) {
+            g.select('.button.forward')
+              .select('rect')
+              .attr('pointer-events', null)
+              .attr('fill', '#f4f6f4')
+          }
+          currentYearViz4 = years[years.indexOf(currentYearViz4) - 1]
+          xScale = scales.setXScaleYears(graphSize.width, viz4Data, currentYearViz4)
+          helper.drawXAxis(g, xScale, graphSize.height)
+          build(viz4Data, 1000, currentYearViz4, xScale, yScale)
+          // Disable the back button
+          if (currentYearViz4 === years[0]) {
+            backButton.select('rect')
+              .attr('pointer-events', 'none')
+              .attr('fill', '#ffffff')
+          }
+        }
+        )
+    }
+
+    /**
+     *   Viz 4:
+     *   Sets up the click handler for the button
+     *
+     *   @param {*} g The d3 Selection of the graph's g SVG element
+     */
+    function setClickHandlerForward (g) {
+      const forwardButton = g.select('.button.forward')
+
+      forwardButton
+        .on('click', () => {
+          // Activate the back button
+          if (currentYearViz4 === years[0]) {
+            g.select('.button.back')
+              .select('rect')
+              .attr('pointer-events', null)
+              .attr('fill', '#f4f6f4')
+          }
+          currentYearViz4 = years[years.indexOf(currentYearViz4) + 1]
+          xScale = scales.setXScaleYears(graphSize.width, viz4Data, currentYearViz4)
+          helper.drawXAxis(g, xScale, graphSize.height)
+          build(viz4Data, 1000, currentYearViz4, xScale, yScale)
+          // Disable the forward button
+          if (currentYearViz4 === years[years.length - 1]) {
+            forwardButton.select('rect')
+              .attr('pointer-events', 'none')
+              .attr('fill', '#ffffff')
+          }
+        }
+        )
+    }
   }).catch(function (error) {
     // Handle any errors that may occur while loading the CSV files
     console.error('Error loading CSV files (viz4):', error)

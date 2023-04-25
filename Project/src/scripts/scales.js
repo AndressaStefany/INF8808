@@ -82,10 +82,10 @@ export function setYScaleViz3 (height, data) {
  * @returns {*} The linear scale in Y
  */
 export function setYScaleViz4 (height, data) {
-  // const ages = data.map((d) => d.ages)
+  const ages = data.map((d) => d.age)
 
   const agesScale = d3.scaleLinear()
-    .domain([0, 25])
+    .domain([0, d3.max(ages)])
     .range([height, 0])
 
   return agesScale
